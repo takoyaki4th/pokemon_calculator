@@ -73,11 +73,11 @@ app.post('/api/Species',wrapAsync(async(req:Request,res:Response) =>{
 }));
 
 app.post('/api/Species/insert',wrapAsync(async(req:Request,res:Response)=>{
-    const { DexNumber,name,HP,Attack,Defense,sAttack,sDefense,Speed }=req.body;
+    const { id,name,hp,Attack,Defense,sAttack,sDefense,Speed }=req.body;
     const [rows,fields]= await connection.query(
         'INSERT INTO Species(DexNumber,name,HP,Attack,Defense,sAttack,sDefense,Speed) \
         VALUES(:DexNumber,:name,:HP,:Attack,:Defense,:sAttack,:sDefense,:Speed)',
-        {DexNumber,name,HP,Attack:Attack,Defense:Defense,sAttack:sAttack,sDefense:sDefense,Speed:Speed}
+        {DexNumber:id,name,HP:hp,Attack,Defense,sAttack,sDefense,Speed}
     );
     res.status(200).json(rows);
 }));
