@@ -62,13 +62,21 @@ app.get('/', wrapAsync(async (req,res) =>{
     res.render(path.join(__dirname,'views','index.ejs'));
 }));*/
 
-app.post('/api/tables',wrapAsync(async(req:Request,res:Response)=>{
+app.get('/api/tables',wrapAsync(async(req:Request,res:Response)=>{
     const [rows,fields]= await connection.query('SHOW TABLES');
     res.status(200).json(rows);
 }));
 
-app.post('/api/Species',wrapAsync(async(req:Request,res:Response) =>{
+app.get('/api/Species',wrapAsync(async(req:Request,res:Response) =>{
     const [rows,fields] = await connection.query('SELECT * FROM Species');
+    res.status(200).json(rows);
+}));
+
+app.get('/api/Species/:id',wrapAsync(async(req:Request,res:Response) =>{
+    const [rows,fields] = await connection.query(
+        'SELECT * FROM Species WHERE Dexnumber=:id',
+        {id:req.params.id}
+    );
     res.status(200).json(rows);
 }));
 
