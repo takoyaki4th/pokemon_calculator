@@ -44,6 +44,7 @@ async function startServer(){
 
 startServer();
 
+//error処理をつける
 function wrapAsync(fn:(req:Request,res:Response,next:NextFunction)=>Promise<void>) {
     return function (req:Request, res:Response, next:NextFunction) {
         fn(req, res, next).catch(e => next(e));
@@ -67,6 +68,7 @@ app.get('/api/tables',wrapAsync(async(req:Request,res:Response)=>{
     res.status(200).json(rows);
 }));
 
+//Speciesテーブルのapi
 app.get('/api/Species',wrapAsync(async(req:Request,res:Response) =>{
     const [rows,fields] = await connection.query('SELECT * FROM Species');
     res.status(200).json(rows);
@@ -101,6 +103,25 @@ app.post('/api/Species/delete',wrapAsync(async(req:Request,res:Response) =>{
     res.status(200).json(rows);
 }));
 
+//movesテーブルのapi
+app.post('/api/moves/insert',wrapAsync(async(req:Request,res:Response) =>{
+    const { name,damage_class,power,type } = req.body;
+    const [rows,fields] = await connection.query(
+        'INSERT INTO moves(name,damage_class,power,type) \
+        VALUES(:name,:damage_class,:power,:type)',
+        {name,damage_class,power,type}
+    );
+    res.status(200).json(rows);
+}));
+
+app.post('/api/moves/delete',wrapAsync(async(req:Request,res:Response) =>{
+    const [rows,fields] = await connection.query(
+        'DELETE FROM moves WHERE id = :id',
+        {id:req.body.id}
+    );
+    res.status(200).json(rows);
+}));
+
 class CustomError extends Error {
     status?: number;
     message:string;
@@ -109,7 +130,7 @@ class CustomError extends Error {
         this.status = status || 500;
         this.message = message;
     }
-}
+};
 
 app.use((err:CustomError,req:Request,res:Response,next:NextFunction) =>{
     console.log(err);
