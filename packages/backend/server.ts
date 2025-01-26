@@ -104,6 +104,15 @@ app.post('/api/Species/delete',wrapAsync(async(req:Request,res:Response) =>{
 }));
 
 //movesテーブルのapi
+app.get('/api/moves/:id',wrapAsync(async(req:Request,res:Response) =>{
+    const [rows,fields] = await connection.query(
+        'SELECT * FROM moves WHERE id = :id',
+        {id:req.params.id}
+    );
+    res.status(200).json(rows);
+    console.log("うほほほ");
+}));
+
 app.post('/api/moves/insert',wrapAsync(async(req:Request,res:Response) =>{
     const { name,damage_class,power,type } = req.body;
     const [rows,fields] = await connection.query(
