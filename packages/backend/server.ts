@@ -81,21 +81,24 @@ app.get('/api/Species/:id',wrapAsync(async(req:Request,res:Response) =>{
 }));
 
 app.post('/api/Species/insert',wrapAsync(async(req:Request,res:Response)=>{
-    const { id,name,hp,Attack,Defense,sAttack,sDefense,Speed }=req.body;
+    let { id,name,hp,Attack,Defense,sAttack,sDefense,Speed,type1,type2 }=req.body;
+    if(type2===""){
+        type2=null;
+    }
     const [rows,fields]= await connection.query(
-        'INSERT INTO Species(DexNumber,name,HP,Attack,Defense,sAttack,sDefense,Speed) \
-        VALUES(:DexNumber,:name,:HP,:Attack,:Defense,:sAttack,:sDefense,:Speed)',
-        {DexNumber:id,name,HP:hp,Attack,Defense,sAttack,sDefense,Speed}
+        'INSERT INTO Species(DexNumber,name,HP,Attack,Defense,sAttack,sDefense,Speed,type1,type2) \
+        VALUES(:DexNumber,:name,:HP,:Attack,:Defense,:sAttack,:sDefense,:Speed,:type1,:type2)',
+        {DexNumber:id,name,HP:hp,Attack,Defense,sAttack,sDefense,Speed,type1,type2}
     );
     res.status(200).json(rows);
 }));
 
 app.post('/api/Species/delete',wrapAsync(async(req:Request,res:Response) =>{
-        const [rows,fields] = await connection.query(
-            'DELETE FROM Species WHERE DexNumber = :id',
-            {id:req.body.id}
-        );
-        res.status(200).json(rows);
+    const [rows,fields] = await connection.query(
+        'DELETE FROM Species WHERE DexNumber = :id',
+        {id:req.body.id}
+    );
+    res.status(200).json(rows);
 }));
 
 class CustomError extends Error {
