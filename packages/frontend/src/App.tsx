@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from "axios";
+import { wrapGet } from "./utils/functions"
 import { useState, useEffect } from "react";
-import { Species } from "./types/Species";
-import { calc_damage, my_move } from "./utils/calcfunc"
-import { TYPE_NUM,TYPE_AFFINITY,Type ,NatureObjs} from "./types/CalcConstant"
+import { Species,Move } from "./types/Species";
+import { calc_damage} from "./utils/calcfunc"
 import { Pokemon } from "./types/Pokemon";
 
 export const App = () => {
@@ -25,30 +25,25 @@ export const App = () => {
   const [max,setMax] = useState<number>(0);
   const [my_poke,setMyPoke] = useState<Pokemon>(new Pokemon("攻撃側のポケモンが設定されていません"));
   const [enemy_poke,setEnemyPoke] = useState<Pokemon>(new Pokemon("防御側のポケモンが設定されていません"));
+  const [my_move,setMyMove] = useState<Move>({
+    id:0,
+    name:"技が設定されていません",
+    damage_class:"physical",
+    power:0,
+    type:"ノーマル"
+  });
 
   useEffect(() => {
     const GetSpecie = async () => {
-      try {
-        const response: AxiosResponse<Array<Species>> = await axios.get(`/api/Species/${DexNumber}`);
-        setSpecie(response.data[0]);
-        if(specie === undefined){
-          throw Error("specieがundefinedです");
-        }
-        setImageUrl(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${DexNumber}.png`);
-        console.log(specie);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          console.error("Axios Error:", error.message);
-        } else {
-          console.error("Error", error);
-        }
-      }
+      const response=await wrapGet<Species>(`/api/Species/${DexNumber}`);
+      setSpecie(response);
+      setImageUrl(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${DexNumber}.png`);
     }
     GetSpecie();
   }, [DexNumber]);
 
   useEffect(() => {
-    const CalcDamage = async () =>{
+    const build = async () =>{
       setMyPoke(await Pokemon.build(
         "攻撃ポケモン",
         3,
@@ -59,21 +54,26 @@ export const App = () => {
       ));
 
       setEnemyPoke(await Pokemon.build(
-          "防御ポケモン",
-          151,
-          "わんぱく",
-          50,
-          {attack:31,defense:31,s_attack:31,s_defense:31},
-          {attack:252,defense:0,s_attack:252,s_defense:252},
+        "防御ポケモン",
+        151,
+        "わんぱく",
+        50,
+        {attack:31,defense:31,s_attack:31,s_defense:31},
+        {attack:252,defense:0,s_attack:252,s_defense:252},
       ));
 
+      const response:Move = await wrapGet<Move>(`api/moves/5`);
+      setMyMove(response);
+   }
+
+    build();
+  },[]);
+
+  useEffect(()=>{
       const [min_damage,max_damage]=calc_damage(my_poke,enemy_poke,my_move);
       setMin(min_damage);
-      setMax(max_damage);
-    }
-
-    CalcDamage();
-  },[]);
+      setMax(max_damage); 
+  },[my_move,my_poke,enemy_poke]);
   
   //0以上,または図鑑の最大値を超えたときの処理を追記する 
   const handleOnPrev = ()=>{

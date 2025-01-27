@@ -23,14 +23,6 @@ export const real_value=(base_stat:number,individual:IntRange<32>,effort:number,
     return Math.floor(((base_stat*2+individual+effort/4)*(level/100)+5)*nature_boost)
 }
 
-export const my_move:Move={
-    id:444,
-    name:"ストーンエッジ",
-    damage_class:"physical",
-    power:100,
-    type:"くさ"
-}
-
 //5捨5超入
 const round_5_rule = (num:number)=>{
     const integer_part=Math.floor(num);
@@ -99,5 +91,6 @@ export const calc_damage = (attacker:Pokemon,defender:Pokemon,move:Move,critical
     //タイプ相性    
     min = calc_type_affinity(min,move.type,defender.specie.type1,defender.specie.type2);
     max = calc_type_affinity(max,move.type,defender.specie.type1,defender.specie.type2);
+    //ダメージが1以下なら1にする処理を追記
     return [min,max]
 }

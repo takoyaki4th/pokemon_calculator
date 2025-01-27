@@ -1,16 +1,19 @@
 import axios,{AxiosResponse} from 'axios';
 
-/*
-export async function Get<T>(url:string):Promise<T>{
+export async function wrapGet<T>(url:string):Promise<T>{
     try {
-        const response:AxiosResponse<T> = await axios.get(url);
-        return response.data;
+        const response:AxiosResponse<Array<T>> = await axios.get(url);
+        if(response.data[0]===undefined){
+          throw Error("取得データがundefinedでした");
+        }
+        return response.data[0];
     } catch (error) {
         if(axios.isAxiosError(error)){
             console.error("Axios Error:",error.message);
         }else{
             console.error("Error",error); 
         }
+        throw error;
     }
 }
 /*
