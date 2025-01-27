@@ -110,7 +110,6 @@ app.get('/api/moves/:id',wrapAsync(async(req:Request,res:Response) =>{
         {id:req.params.id}
     );
     res.status(200).json(rows);
-    console.log("うほほほ");
 }));
 
 app.post('/api/moves/insert',wrapAsync(async(req:Request,res:Response) =>{
