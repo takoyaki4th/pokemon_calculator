@@ -1,6 +1,5 @@
 import axios,{AxiosResponse} from 'axios';
-import { IntRange } from '../types/IntRange';
-import { EffortRange, EffortValue, IndividualRange, LevelRange } from '../types/Pokemon';
+import { EffortRange, IndividualRange, LevelRange } from '../types/Pokemon';
 
 export async function wrapGet<T>(url:string):Promise<T>{
     try {
@@ -42,16 +41,13 @@ export async function Post(url:string, sendedData:object, func:function) {
 */
 
 export const isLevelRange = (value:number): value is LevelRange =>{
-  value = Math.floor(value);
   return value>=1 && value <= 100;
 }
 
 export const isIndividualRange = (value:number): value is IndividualRange =>{
-  value = Math.floor(value);
   return value >=0 && value <= 31;
 }
 
 export const isEffortRange = (value:number):value is EffortRange =>{
-  value = Math.floor(value);
   return value >=0 && value <= 252;
 }
