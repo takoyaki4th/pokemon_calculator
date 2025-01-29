@@ -1,16 +1,17 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { FormStatePair } from "../types/Calculator";
 import { EffortRange, EffortValue, IndividualRange, IndividualValue } from "../types/Pokemon";
 import { isEffortRange, isIndividualRange, isLevelRange, statsToJa } from "../utils/functions";
+import { nature_key_array } from "../types/CalcConstant";
 
 //個体値のコンポーネント
 const InputIndividual:React.FC<{name:keyof IndividualValue,value:IndividualRange,onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void}> = memo(({name,value,onChange}) => {
     return(
         <>
-        <label>{ statsToJa(name) }</label>
+        <label>{statsToJa(name)}</label>
         <input type="number" name={name} step="1" min="0" max="31" inputMode="numeric" value={value} onChange={onChange}/>
         </>
-    ) 
+    ); 
 });
 
 //努力値のコンポーネント
@@ -20,13 +21,21 @@ const InputEffort:React.FC<{name:keyof EffortValue,value:EffortRange,onChange:(e
         <label>{statsToJa(name)}</label>
         <input className="effort-box" type="number" name={name} step="8" min="0" max="252" inputMode="numeric" value={value} onChange={onChange}/>
         </>
-    ) 
+    ); 
+});
+
+const NatureOptions:React.FC = memo(() =>{
+    const option_list = nature_key_array.map((nature_key)=>{
+        return <option key={nature_key} value={nature_key}>{nature_key}</option>
+    });
+
+    return <>{option_list}</>;
 });
 
 export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
     //図鑑番号の変更
-    const handleDexNumChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
-        const { name, value } = e.target;
+    const handleDexNumChange = useCallback((e:React.ChangeEvent<HTMLInputElement>) =>{
+        const { value } = e.target;
         const value_to_num = parseInt(value);
         if(isNaN(value_to_num)){
             throw Error("値がlevelになりません");
@@ -35,11 +44,11 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
             ...data,
             dex_number:value_to_num
         });
-    };
+    },[]);
 
     //levelの変更
-    const handleLevelChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+    const handleLevelChange = useCallback((e:React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
         const value_to_num = parseInt(value);
         if(!(isLevelRange(value_to_num))){
             throw Error("値がlevelになりません");
@@ -48,10 +57,10 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
             ...data,
             level:value_to_num
         });
-    }
+    },[]);
 
     //個体値の変更
-    const handleIndividualChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const handleIndividualChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
         const { name, value } = e.target;
         const value_to_num = parseInt(value);
         if(!(isIndividualRange(value_to_num))){
@@ -66,10 +75,10 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
                 [name]:indivi_value
             }
         });
-    };
+    },[]);
 
     //努力値の変更
-    const handleEffortChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
+    const handleEffortChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
         const { name, value } = e.target;
         const value_to_num = parseInt(value);
         if(!(isEffortRange(value_to_num))){
@@ -84,7 +93,15 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
                 [name]:indivi_value
             }
         });
-    };
+    },[]);
+
+    const handleNatureChange = useCallback((e:React.ChangeEvent<HTMLSelectElement>)=>{
+        const { name, value } = e.target;
+        set_fn({
+            ...data,
+            nature:value
+        });
+    },[]);
 
     return(
         <>
@@ -93,6 +110,8 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
             <input type="number" name="dex_number" step="10" min="1" max="151"inputMode="numeric" value={data.dex_number} onChange={handleDexNumChange}/> 
             <label>レベル</label>
             <input type="number" name="level" step="10" min="1" max="100"inputMode="numeric" value={data.level} onChange={handleLevelChange}/> 
+            <label>性格</label>
+            <select name="nature" onChange={handleNatureChange}><NatureOptions/></select>
         </div>
         <p>個体値</p>
         <div>
@@ -117,6 +136,5 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
             <InputEffort name="speed" value={data.effort.speed} onChange={handleEffortChange}/>
         </div>
         </>
-    )
+    );
 });            
-

@@ -14,3 +14,10 @@ export type FormStatePair = {
     data:PokeData,
     set_fn:(form_data:PokeData)=>void
 };
+
+export type DamageResult =  {
+    min:number,
+    max:number,
+    min_per:number,
+    max_per:number
+}

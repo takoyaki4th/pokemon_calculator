@@ -3,12 +3,11 @@ import { wrapGet } from "../utils/functions"
 import { Move } from "../types/Species";
 import { calc_damage } from "../utils/calcfunc"
 import { Pokemon } from "../types/Pokemon";
-import { PokeData } from "../types/Calculator";
+import { DamageResult, PokeData } from "../types/Calculator";
 import { PokeForm } from "./PokeForm";
 
 const Calculator:React.FC = memo(() => {
-    const [min,setMin] = useState<number>(0);
-    const [max,setMax] = useState<number>(0);
+    const [damage_result,setDamageResult] = useState<DamageResult>({min:0,max:0,min_per:0,max_per:0});
     const [my_poke,setMyPoke] = useState<Pokemon>(new Pokemon("攻撃側のポケモンが設定されていません"));
     const [enemy_poke,setEnemyPoke] = useState<Pokemon>(new Pokemon("防御側のポケモンが設定されていません"));
     const [my_move,setMyMove] = useState<Move>({
@@ -50,9 +49,7 @@ const Calculator:React.FC = memo(() => {
     },[my_move_index,my_poke_form,enemy_poke_form]);
 
     useEffect(()=>{
-        const [min_damage,max_damage]=calc_damage(my_poke,enemy_poke,my_move);
-        setMin(min_damage);
-        setMax(max_damage); 
+        setDamageResult(calc_damage(my_poke,enemy_poke,my_move));
     },[my_move,my_poke,enemy_poke]); 
 
     console.log("レンダリングされました");
@@ -84,7 +81,8 @@ const Calculator:React.FC = memo(() => {
             </div>
             <div className="border">
                 <p>{my_poke.specie.name}の{my_move.name}攻撃!</p>
-                <p>{enemy_poke.specie.name}に最小{min},最大{max}ダメージ!</p>
+                <p>{enemy_poke.specie.name}に最小{damage_result.min},最大{damage_result.max}ダメージ!</p>
+                <p>{damage_result.min_per}%〜{damage_result.max_per}%</p>
             </div>
         </div>
     )

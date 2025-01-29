@@ -1,7 +1,7 @@
-import { IntRange }from "../types/IntRange"
 import { Stat,Nature,NatureObjs, TYPE_AFFINITY, TYPE_NUM, Type } from "../types/CalcConstant"
 import { EffortRange, IndividualRange, LevelRange, Pokemon } from "../types/Pokemon"
 import { Move } from "../types/Species"
+import { DamageResult } from "../types/Calculator"
 
 const MULTIPLIER_BASE=4096
 const MULTIPLIER_1_5X=6144
@@ -57,7 +57,7 @@ const calc_type_affinity=(current_damage:number,move_type:Type,defender_type1:Ty
 
 //ダメージ計算のメインの部分
 /////攻撃,威力など補正値も入れる
-export const calc_damage = (attacker:Pokemon,defender:Pokemon,move:Move,critical:boolean=false):number[]=>{
+export const calc_damage = (attacker:Pokemon,defender:Pokemon,move:Move,critical:boolean=false):DamageResult=>{
     let final_attack=0;
     let final_defense=0;
 
@@ -103,7 +103,8 @@ export const calc_damage = (attacker:Pokemon,defender:Pokemon,move:Move,critical
     }
     
     //ダメージの％化
-    //const min_per = min/defender.
+    const min_per = Math.round(min/defender.hp()*1000)/10;
+    const max_per = Math.round(max/defender.hp()*1000)/10;
 
-    return [min,max]
+    return {min,max,min_per,max_per}
 }

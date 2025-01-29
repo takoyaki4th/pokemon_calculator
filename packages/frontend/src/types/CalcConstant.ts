@@ -54,6 +54,8 @@ export const NatureObjs:NatureObjsType={
 //性格の名称の型 関数などの引数で受け取るときはこっちを使う
 export type Nature=keyof typeof NatureObjs;
 
+export const nature_key_array=Object.keys(NatureObjs);
+
 //タイプと数字を紐付ける
 export const TYPE_NUM={
     "ノーマル":0,
