@@ -2,9 +2,9 @@ import { useState,useEffect, useCallback, memo } from "react";
 import { Species } from "../types/Species";
 import { wrapGet } from "../utils/functions";
 
-const PokeDex = memo(() => {
+const PokeDex:React.FC = memo(() => {
     const [imageurl, setImageUrl] = useState<string>("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png");
-    const [DexNumber,setDexNumber] = useState<number>(1);
+    const [DexNumber,setDexNumber] = useState<string>("1");
     const [specie, setSpecie] = useState<Species>({
         DexNumber: 0,
         name: "ポケモンが設定されていません",
@@ -17,6 +17,7 @@ const PokeDex = memo(() => {
         type1:"ノーマル",
         type2:null
     });
+    const [to_user, setToUser] = useState<string>("");
 
     useEffect(() => {
     const GetSpecie = async () => {
@@ -29,16 +30,21 @@ const PokeDex = memo(() => {
 
     //0以上,または図鑑の最大値を超えたときの処理を追記する 
     const handleOnPrev = useCallback(()=>{
-        setDexNumber((prevDexNumber) => prevDexNumber - 1);
+        setDexNumber((prevDexNumber) => {
+            return String(Number(prevDexNumber) - 1)
+        });
     },[]);
 
     const handleOnNext = useCallback(()=>{
-        setDexNumber((prevDexNumber) => prevDexNumber + 1);
+        setDexNumber((prevDexNumber) => {
+            return String(Number(prevDexNumber) + 1)
+        });
     },[]);
 
     return(
         <div className="container">
-            <p>No.{specie.DexNumber}</p>
+            <label>No.</label>
+            <input type="number" step="10" min="1" max="151"inputMode="numeric" value={DexNumber} onChange={event => setDexNumber(event.target.value)}/>
             <h1>{specie.name}</h1>
             <img src={imageurl} alt={specie.name} />
             <div>
@@ -54,6 +60,8 @@ const PokeDex = memo(() => {
                 <button onClick={handleOnPrev}>Prev-page</button>
                 <button onClick={handleOnNext}>Next-page</button>
             </div> 
+            <p>userへのメッセージ</p>
+            <p>{}</p>
         </div>
     );
 });
