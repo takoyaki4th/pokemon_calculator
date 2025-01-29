@@ -1,6 +1,6 @@
 import { Species } from "./Species";
 import { Nature} from "./CalcConstant";
-import { get_nature_boost, real_value } from "../utils/calcfunc"
+import { get_nature_boost, real_value, real_value_hp } from "../utils/calcfunc"
 import { IntRange } from "./IntRange";
 import { wrapGet } from "../utils/functions";
 import { PokeData } from "./Calculator";
@@ -12,19 +12,23 @@ export type LevelRange=IntRange<101>;
 //個体値
 export type IndividualRange=IntRange<32>;
 export type IndividualValue={
+    hp:IndividualRange;
     attack:IndividualRange;
     defense:IndividualRange;
     s_attack:IndividualRange; //特殊攻撃
     s_defense:IndividualRange;
+    speed:IndividualRange;
 }
 
 //努力値
 export type EffortRange=IntRange<253>
 export type EffortValue={
+    hp:EffortRange;
     attack:EffortRange;
     defense:EffortRange;
     s_attack:EffortRange;
     s_defense:EffortRange;
+    speed:EffortRange;
 }
 
 //ポケモンの個体の定義
@@ -41,8 +45,8 @@ export class Pokemon{
         name:string,
         nature:Nature="まじめ",
         level:LevelRange=50,
-        individual:IndividualValue = {attack:31,defense:31,s_attack:31,s_defense:31},
-        effort:EffortValue = {attack:252,defense:0,s_attack:252,s_defense:0}
+        individual:IndividualValue = {hp:31,attack:31,defense:31,s_attack:31,s_defense:31,speed:31},
+        effort:EffortValue = {hp:0,attack:252,defense:0,s_attack:252,s_defense:0,speed:0}
         ) {
         this.name = name
         this.nature = nature
@@ -70,20 +74,27 @@ export class Pokemon{
         return pokemon;
     }
 
+    hp(){
+        return real_value_hp(this.specie.HP,this.individual.hp,this.effort.hp,this.level)
+    }
     attack(){
         const nature_boost=get_nature_boost("ATTACK",this.nature);
-        return real_value(this.specie.Attack,this.individual.attack,this.effort.attack,this.level,nature_boost)
+        return real_value(this.specie.Attack,this.individual.attack,this.effort.attack,this.level,nature_boost);
     }
     defense(){
         const nature_boost=get_nature_boost("DEFENSE",this.nature);
-        return real_value(this.specie.Defense,this.individual.defense,this.effort.defense,this.level,nature_boost) 
+        return real_value(this.specie.Defense,this.individual.defense,this.effort.defense,this.level,nature_boost);
     }
     s_attack(){
         const nature_boost=get_nature_boost("S_ATTACK",this.nature);
-        return real_value(this.specie.sAttack,this.individual.s_attack,this.effort.s_attack,this.level,nature_boost)
+        return real_value(this.specie.sAttack,this.individual.s_attack,this.effort.s_attack,this.level,nature_boost);
     }
     s_defense(){
         const nature_boost=get_nature_boost("S_ATTACK",this.nature);
-        return real_value(this.specie.sDefense,this.individual.s_defense,this.effort.s_defense,this.level,nature_boost)
+        return real_value(this.specie.sDefense,this.individual.s_defense,this.effort.s_defense,this.level,nature_boost);
+    }
+    speed(){
+        const nature_boost=get_nature_boost("SPEED",this.nature);
+        return real_value(this.specie.Speed,this.individual.speed,this.effort.speed,this.level,nature_boost);
     }
 }

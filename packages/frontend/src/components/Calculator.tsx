@@ -24,16 +24,16 @@ const Calculator:React.FC = memo(() => {
         dex_number:1,
         nature:"わんぱく",
         level:50,
-        individual:{attack:31,defense:31,s_attack:31,s_defense:31},
-        effort:{attack:252,defense:0,s_attack:252,s_defense:0}
+        individual:{hp:31,attack:31,defense:31,s_attack:31,s_defense:31,speed:31},
+        effort:{hp:0,attack:252,defense:0,s_attack:252,s_defense:0,speed:0}
     });
     const [enemy_poke_form,setEnemyPokeForm]=useState<PokeData>({
         name:"ニックネーム",
         dex_number:1,
         nature:"わんぱく",
         level:50,
-        individual:{attack:31,defense:31,s_attack:31,s_defense:31},
-        effort:{attack:252,defense:0,s_attack:252,s_defense:0}
+        individual:{hp:31,attack:31,defense:31,s_attack:31,s_defense:31,speed:31},
+        effort:{hp:0,attack:252,defense:0,s_attack:252,s_defense:0,speed:0}
     })
 
     useEffect(() => {

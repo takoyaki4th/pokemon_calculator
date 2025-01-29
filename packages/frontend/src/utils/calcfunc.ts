@@ -1,6 +1,6 @@
 import { IntRange }from "../types/IntRange"
 import { Stat,Nature,NatureObjs, TYPE_AFFINITY, TYPE_NUM, Type } from "../types/CalcConstant"
-import { Pokemon } from "../types/Pokemon"
+import { EffortRange, IndividualRange, LevelRange, Pokemon } from "../types/Pokemon"
 import { Move } from "../types/Species"
 
 const MULTIPLIER_BASE=4096
@@ -19,7 +19,11 @@ export const get_nature_boost=(stat:Stat,nature:Nature) => {
 }
 
 //ステータス実数値計算
-export const real_value=(base_stat:number,individual:IntRange<32>,effort:number,level:number,nature_boost:number)=>{
+export const real_value_hp=(base_stat:number,individual:IndividualRange,effort:EffortRange,level:LevelRange)=>{
+    return Math.floor((base_stat*2+individual+effort/4)*(level/100)+10+level)
+}
+
+export const real_value=(base_stat:number,individual:IndividualRange,effort:EffortRange,level:LevelRange,nature_boost:number)=>{
     return Math.floor(((base_stat*2+individual+effort/4)*(level/100)+5)*nature_boost)
 }
 
@@ -91,6 +95,15 @@ export const calc_damage = (attacker:Pokemon,defender:Pokemon,move:Move,critical
     //タイプ相性    
     min = calc_type_affinity(min,move.type,defender.specie.type1,defender.specie.type2);
     max = calc_type_affinity(max,move.type,defender.specie.type1,defender.specie.type2);
+
     //ダメージが1以下なら1にする処理を追記
+    if(min<1){
+        min=1;
+        if(max<1) max=1;
+    }
+    
+    //ダメージの％化
+    //const min_per = min/defender.
+
     return [min,max]
 }

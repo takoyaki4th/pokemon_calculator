@@ -51,3 +51,31 @@ export const isIndividualRange = (value:number): value is IndividualRange =>{
 export const isEffortRange = (value:number):value is EffortRange =>{
   return value >=0 && value <= 252;
 }
+
+//型判定やらなんやらなんもされてないから要注意
+export const statsToJa = (stat:string):string=>{
+  let str;
+  switch (stat){
+    case "hp":
+      str="HP";
+      break;
+    case "attack":
+      str="攻撃";
+      break;
+    case "defense":
+      str="防御";
+      break;
+    case "s_attack":
+      str="特攻";
+      break;
+    case "s_defense":
+      str="特防";
+      break;
+    case "speed":
+      str="素早さ";
+      break;
+    default:
+      str = "name属性がおかしいです";
+  } 
+  return str;
+}
