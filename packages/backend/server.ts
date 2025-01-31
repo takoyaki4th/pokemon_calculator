@@ -104,13 +104,22 @@ app.post('/api/Species/delete',wrapAsync(async(req:Request,res:Response) =>{
 }));
 
 //movesテーブルのapi
-app.get('/api/moves/:id',wrapAsync(async(req:Request,res:Response) =>{
+app.get('/api/moves/id/:id',wrapAsync(async(req:Request,res:Response) =>{
     const [rows,fields] = await connection.query(
         'SELECT * FROM moves WHERE id = :id',
         {id:req.params.id}
     );
     res.status(200).json(rows);
 }));
+
+app.get('/api/moves/name/:name',wrapAsync(async(req:Request,res:Response) =>{
+    const [rows,fields] = await connection.query(
+        'SELECT * FROM moves WHERE name = :name',
+        {name:req.params.name}
+    );
+    res.status(200).json(rows);
+}));
+
 
 app.post('/api/moves/insert',wrapAsync(async(req:Request,res:Response) =>{
     const { name,damage_class,power,type } = req.body;
@@ -141,7 +150,7 @@ app.get('/api/moveLearnMap/id/:id',wrapAsync(async(req:Request,res:Response) =>{
 
 app.get('/api/moveLearnMap/dex_number/:dex_number',wrapAsync(async(req:Request,res:Response)=>{
     const [rows,fields] = await connection.query(
-        'SELECT move_id FROM moveLearnMap WHERE dex_number = :dex_number',
+        'SELECT name FROM moves WHERE damage_class != "status" AND id IN(SELECT move_id FROM moveLearnMap WHERE dex_number = :dex_number)',
         {dex_number:req.params.dex_number}
     );
     res.status(200).json(rows);

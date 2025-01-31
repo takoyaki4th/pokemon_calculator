@@ -3,6 +3,7 @@ import { FormStatePair } from "../types/Calculator";
 import { EffortRange, EffortValue, IndividualRange, IndividualValue } from "../types/Pokemon";
 import { isEffortRange, isIndividualRange, isLevelRange, statsToJa } from "../utils/functions";
 import { nature_key_array } from "../types/CalcConstant";
+import Options from "./Options";
 
 //個体値のコンポーネント
 const InputIndividual:React.FC<{name:keyof IndividualValue,value:IndividualRange,onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void}> = memo(({name,value,onChange}) => {
@@ -22,14 +23,6 @@ const InputEffort:React.FC<{name:keyof EffortValue,value:EffortRange,onChange:(e
         <input className="effort-box" type="number" name={name} step="8" min="0" max="252" inputMode="numeric" value={value} onChange={onChange}/>
         </>
     ); 
-});
-
-const NatureOptions:React.FC = memo(() =>{
-    const option_list = nature_key_array.map((nature_key)=>{
-        return <option key={nature_key} value={nature_key}>{nature_key}</option>
-    });
-
-    return <>{option_list}</>;
 });
 
 export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
@@ -95,6 +88,7 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
         });
     },[]);
 
+    //性格の変更
     const handleNatureChange = useCallback((e:React.ChangeEvent<HTMLSelectElement>)=>{
         const { name, value } = e.target;
         set_fn({
@@ -111,7 +105,7 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
             <label>レベル</label>
             <input type="number" name="level" step="10" min="1" max="100"inputMode="numeric" value={data.level} onChange={handleLevelChange}/> 
             <label>性格</label>
-            <select name="nature" onChange={handleNatureChange}><NatureOptions/></select>
+            <select name="nature" onChange={handleNatureChange}><Options array={nature_key_array}/></select>
         </div>
         <p>個体値</p>
         <div>

@@ -5,11 +5,14 @@ import { calc_damage } from "../utils/calcfunc"
 import { Pokemon } from "../types/Pokemon";
 import { DamageResult, PokeData } from "../types/Calculator";
 import { PokeForm } from "./PokeForm";
+import axios from "axios";
+import Options from "./Options";
 
 const Calculator:React.FC = memo(() => {
     const [damage_result,setDamageResult] = useState<DamageResult>({min:0,max:0,min_per:0,max_per:0});
     const [my_poke,setMyPoke] = useState<Pokemon>(new Pokemon("攻撃側のポケモンが設定されていません"));
     const [enemy_poke,setEnemyPoke] = useState<Pokemon>(new Pokemon("防御側のポケモンが設定されていません"));
+    const [move_name,setMoveName] = useState<string>("つるのムチ");
     const [my_move,setMyMove] = useState<Move>({
         id:0,
         name:"技が設定されていません",
@@ -17,7 +20,7 @@ const Calculator:React.FC = memo(() => {
         power:0,
         type:"ノーマル"
     });
-    const [my_move_index,setMyMoveIndex]=useState<string>("1");
+    const [move_array,setMoveArray]=useState<string[]>(["つるのムチ"]);
     const [my_poke_form,setMyPokeForm]=useState<PokeData>({
         name:"ニックネーム",
         dex_number:1,
@@ -33,7 +36,7 @@ const Calculator:React.FC = memo(() => {
         level:50,
         individual:{hp:31,attack:31,defense:31,s_attack:31,s_defense:31,speed:31},
         effort:{hp:0,attack:252,defense:0,s_attack:252,s_defense:0,speed:0}
-    })
+    });
 
     useEffect(() => {
         const build = async () =>{
@@ -41,12 +44,20 @@ const Calculator:React.FC = memo(() => {
 
             setEnemyPoke(await Pokemon.build(enemy_poke_form));
 
-            const response:Move = await wrapGet<Move>(`api/moves/${my_move_index}`);
-            setMyMove(response);
-        }
+            //axiosのエラーハンドリングをちゃんとする
+            try {
+                
+                const res_moves = await axios<Array<{name:string}>>(`api/moveLearnMap/dex_number/${my_poke_form.dex_number}`);
+                const res_array = res_moves.data.map(move=> move.name);
+                setMoveArray(res_array);
+            } catch (error) {
+               console.log(error); 
+            }
 
+            setMyMove(await wrapGet<Move>(`api/moves/name/${move_name}`));
+        }
         build();
-    },[my_move_index,my_poke_form,enemy_poke_form]);
+    },[move_name,my_poke_form,enemy_poke_form]);
 
     useEffect(()=>{
         setDamageResult(calc_damage(my_poke,enemy_poke,my_move));
@@ -68,7 +79,7 @@ const Calculator:React.FC = memo(() => {
             </div>
             <div className="border">
                 <label>使用技のID</label>
-                <input type="number" name="move_index" step="1" min="1" max="100" inputMode="numeric" value={my_move_index} onChange={event => setMyMoveIndex(event.target.value)}/>
+                <select name="move" id="move" onChange={event=>setMoveName(event.target.value)}><Options array={move_array}/></select>
             </div>
  
             <div className="border">
