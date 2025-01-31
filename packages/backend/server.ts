@@ -130,6 +130,41 @@ app.post('/api/moves/delete',wrapAsync(async(req:Request,res:Response) =>{
     res.status(200).json(rows);
 }));
 
+//moveLearnMap(ポケモンと覚える技を対応させるデータベース)
+app.get('/api/moveLearnMap/id/:id',wrapAsync(async(req:Request,res:Response) =>{
+    const [rows,fields] = await connection.query(
+        'SELECT * FROM moveLearnMap WHERE id = :id',
+        {id:req.params.id}
+    );
+    res.status(200).json(rows);
+}));
+
+app.get('/api/moveLearnMap/dex_number/:dex_number',wrapAsync(async(req:Request,res:Response)=>{
+    const [rows,fields] = await connection.query(
+        'SELECT move_id FROM moveLearnMap WHERE dex_number = :dex_number',
+        {dex_number:req.params.dex_number}
+    );
+    res.status(200).json(rows);
+}));
+
+app.post('/api/moveLearnMap/insert',wrapAsync(async(req:Request,res:Response) =>{
+    const { dex_number,move_id } = req.body;
+    const [rows,fields] = await connection.query(
+        'INSERT INTO moveLearnMap(dex_number,move_id) \
+        VALUES(:dex_number,:move_id)',
+        {dex_number,move_id}
+    );
+    res.status(200).json(rows);
+}));
+
+app.post('/api/moveLearnMap/delete',wrapAsync(async(req:Request,res:Response) =>{
+    const [rows,fields] = await connection.query(
+        'DELETE FROM moveLearnMap WHERE id = :id',
+        {id:req.body.id}
+    );
+    res.status(200).json(rows);
+}));
+
 class CustomError extends Error {
     status?: number;
     message:string;
