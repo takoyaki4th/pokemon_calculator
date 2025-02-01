@@ -23,7 +23,7 @@ const Calculator:React.FC = memo(() => {
     const [move_array,setMoveArray]=useState<string[]>(["つるのムチ"]);
     const [my_poke_form,setMyPokeForm]=useState<PokeData>({
         name:"ニックネーム",
-        dex_number:1,
+        dex_number:5,
         nature:"わんぱく",
         level:50,
         individual:{hp:31,attack:31,defense:31,s_attack:31,s_defense:31,speed:31},
@@ -53,8 +53,7 @@ const Calculator:React.FC = memo(() => {
             } catch (error) {
                console.log(error); 
             }
-
-            setMyMove(await wrapGet<Move>(`api/moves/name/${move_name}`));
+            setMyMove(await wrapGet<Move>(`api/moves/name/${encodeURIComponent(move_name)}`));
         }
         build();
     },[move_name,my_poke_form,enemy_poke_form]);
@@ -70,7 +69,7 @@ const Calculator:React.FC = memo(() => {
             <div className="flex">
                 <div className="center border">
                     <h3>攻撃ポケモン</h3>
-                    <PokeForm data={my_poke_form} set_fn={setMyPokeForm}/>
+                    <PokeForm key="my" data={my_poke_form} set_fn={setMyPokeForm}/>
                 </div>
                 <div className="center border">
                     <h3>防御ポケモン</h3>

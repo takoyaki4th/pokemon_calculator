@@ -26,6 +26,8 @@ const InputEffort:React.FC<{name:keyof EffortValue,value:EffortRange,onChange:(e
 });
 
 export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
+    console.log(data.dex_number);
+
     //図鑑番号の変更
     const handleDexNumChange = useCallback((e:React.ChangeEvent<HTMLInputElement>) =>{
         const { value } = e.target;
