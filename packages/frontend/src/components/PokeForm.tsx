@@ -26,10 +26,8 @@ const InputEffort:React.FC<{name:keyof EffortValue,value:EffortRange,onChange:(e
 });
 
 export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
-    console.log(data.dex_number);
-
     //図鑑番号の変更
-    const handleDexNumChange = useCallback((e:React.ChangeEvent<HTMLInputElement>) =>{
+    const handleDexNumChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
         const { value } = e.target;
         const value_to_num = parseInt(value);
         if(isNaN(value_to_num)){
@@ -39,10 +37,10 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
             ...data,
             dex_number:value_to_num
         });
-    },[]);
+    };
 
     //levelの変更
-    const handleLevelChange = useCallback((e:React.ChangeEvent<HTMLInputElement>) => {
+    const handleLevelChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         const value_to_num = parseInt(value);
         if(!(isLevelRange(value_to_num))){
@@ -52,10 +50,10 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
             ...data,
             level:value_to_num
         });
-    },[]);
+    };
 
     //個体値の変更
-    const handleIndividualChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
+    const handleIndividualChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
         const { name, value } = e.target;
         const value_to_num = parseInt(value);
         if(!(isIndividualRange(value_to_num))){
@@ -70,10 +68,10 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
                 [name]:indivi_value
             }
         });
-    },[]);
+    };
 
     //努力値の変更
-    const handleEffortChange = useCallback((e:React.ChangeEvent<HTMLInputElement>)=>{
+    const handleEffortChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
         const { name, value } = e.target;
         const value_to_num = parseInt(value);
         if(!(isEffortRange(value_to_num))){
@@ -88,16 +86,16 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
                 [name]:indivi_value
             }
         });
-    },[]);
+    };
 
     //性格の変更
-    const handleNatureChange = useCallback((e:React.ChangeEvent<HTMLSelectElement>)=>{
+    const handleNatureChange = (e:React.ChangeEvent<HTMLSelectElement>)=>{
         const { name, value } = e.target;
         set_fn({
             ...data,
             nature:value
         });
-    },[]);
+    };
 
     return(
         <>
