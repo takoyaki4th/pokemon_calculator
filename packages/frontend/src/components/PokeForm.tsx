@@ -104,7 +104,7 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 
     return(
         <>
-        <div>
+        <div className="flex mb-5">
             <SuggestionInput mode={mode}/>
         </div>
         <div>
@@ -131,7 +131,7 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
             <InputEffort name="s_attack" value={data.effort.s_attack} onChange={handleEffortChange} />
             <InputEffort name="s_defense" value={data.effort.s_defense} onChange={handleEffortChange} />
         </div>
-        <div>
+        <div className="mb-5">
             <InputEffort name="hp" value={data.effort.hp} onChange={handleEffortChange}/>
             <InputEffort name="speed" value={data.effort.speed} onChange={handleEffortChange}/>
         </div>

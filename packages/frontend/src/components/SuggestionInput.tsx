@@ -79,6 +79,7 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     return(
         <>
         <label>ポケモン</label>
+        <div className="suggestion-input">
         <input
             type="text" value={text}
             onFocus={() => setIsFocus(true)} 
@@ -93,7 +94,8 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
                     </li>
                 ))}
             </ul>
-        )} 
+        )}
+        </div>
         </>
     );
 });
