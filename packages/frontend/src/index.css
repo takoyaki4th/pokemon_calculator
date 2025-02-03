@@ -50,3 +50,14 @@ code {
 .effort-box{
   width:50px;
 }
+
+ul {
+  list-style-type: none;
+  padding: 0;  /* インデントも削除 */
+  margin:0;
+}
+
+li:hover{
+  background-color: gray;
+  cursor: default;
+}

@@ -1,5 +1,6 @@
 import { Nature } from "./CalcConstant";
 import { EffortValue, IndividualValue, LevelRange }from "./Pokemon"
+import { Dispatch,SetStateAction } from "react";
 
 export type PokeData = {
     name:string,
@@ -12,7 +13,7 @@ export type PokeData = {
 
 export type FormStatePair = {
     data:PokeData,
-    set_fn:(form_data:PokeData)=>void
+    set_fn:Dispatch<SetStateAction<PokeData>>
 };
 
 export type DamageResult =  {

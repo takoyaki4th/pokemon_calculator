@@ -1,5 +1,8 @@
 import axios,{AxiosResponse} from 'axios';
 import { EffortRange, IndividualRange, LevelRange } from '../types/Pokemon';
+import { useContext } from 'react'; 
+import { EnemyPokeFormContext, MyPokeFormContext } from '../components/providers/GlobalState';
+import { MyOrEnemey } from '../types/MyOrEnemy';
 
 export async function wrapGet<T>(url:string):Promise<T>{
     try {

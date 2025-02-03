@@ -1,0 +1,1 @@
+export type id_text = {id:number,name:string};

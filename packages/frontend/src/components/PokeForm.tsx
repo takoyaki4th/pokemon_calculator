@@ -1,12 +1,14 @@
-import { memo, useCallback } from "react";
-import { FormStatePair } from "../types/Calculator";
+import { FC, memo, useContext, useEffect } from "react";
 import { EffortRange, EffortValue, IndividualRange, IndividualValue } from "../types/Pokemon";
 import { isEffortRange, isIndividualRange, isLevelRange, statsToJa } from "../utils/functions";
 import { nature_key_array } from "../types/CalcConstant";
 import Options from "./Options";
+import SuggestionInput from "./SuggestionInput";
+import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/GlobalState";
+import { MyOrEnemey } from "../types/MyOrEnemy";
 
 //個体値のコンポーネント
-const InputIndividual:React.FC<{name:keyof IndividualValue,value:IndividualRange,onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void}> = memo(({name,value,onChange}) => {
+const InputIndividual:FC<{name:keyof IndividualValue,value:IndividualRange,onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void}> = memo(({name,value,onChange}) => {
     return(
         <>
         <label>{statsToJa(name)}</label>
@@ -16,7 +18,7 @@ const InputIndividual:React.FC<{name:keyof IndividualValue,value:IndividualRange
 });
 
 //努力値のコンポーネント
-const InputEffort:React.FC<{name:keyof EffortValue,value:EffortRange,onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void}> = memo(({name,value,onChange}) => {
+const InputEffort:FC<{name:keyof EffortValue,value:EffortRange,onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void}> = memo(({name,value,onChange}) => {
     return(
         <>
         <label>{statsToJa(name)}</label>
@@ -25,7 +27,10 @@ const InputEffort:React.FC<{name:keyof EffortValue,value:EffortRange,onChange:(e
     ); 
 });
 
-export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
+export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
+    console.log(mode);
+    const {data,set_fn}=useContext((mode==="my" ? MyPokeFormContext:EnemyPokeFormContext));
+
     //図鑑番号の変更
     const handleDexNumChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
         const { value } = e.target;
@@ -100,8 +105,9 @@ export const PokeForm:React.FC<FormStatePair> = memo(({data,set_fn})=>{
     return(
         <>
         <div>
-            <label>図鑑番号</label>
-            <input type="number" name="dex_number" step="10" min="1" max="151"inputMode="numeric" value={data.dex_number} onChange={handleDexNumChange}/> 
+            <SuggestionInput mode={mode}/>
+        </div>
+        <div>
             <label>レベル</label>
             <input type="number" name="level" step="10" min="1" max="100"inputMode="numeric" value={data.level} onChange={handleLevelChange}/> 
             <label>性格</label>

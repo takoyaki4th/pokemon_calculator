@@ -74,6 +74,11 @@ app.get('/api/Species',wrapAsync(async(req:Request,res:Response) =>{
     res.status(200).json(rows);
 }));
 
+app.get('/api/Species/all_pokemon',wrapAsync(async(req:Request,res:Response) =>{
+    const [rows,fields] = await connection.query('SELECT DexNumber as id,name FROM Species'); //分かりやすいからidにした
+    res.status(200).json(rows);
+}));
+
 app.get('/api/Species/:id',wrapAsync(async(req:Request,res:Response) =>{
     const [rows,fields] = await connection.query(
         'SELECT * FROM Species WHERE Dexnumber=:id',
