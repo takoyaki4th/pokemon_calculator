@@ -60,19 +60,52 @@ const calc_type_affinity=(current_damage:number,move_type:Type,defender_type1:Ty
 export const calc_damage = (attacker:Pokemon,defender:Pokemon,move:Move,critical:boolean=false):DamageResult=>{
     let final_attack=0;
     let final_defense=0;
+    let nature_boost=1;
 
     //技が特殊か物理かで最終攻撃と防御を決める
     if(move.damage_class=="physical"){
-        final_attack=attacker.attack();
-        final_defense=defender.defense();
+        nature_boost=get_nature_boost("ATTACK",attacker.nature);
+        final_attack=real_value(
+            attacker.specie.Attack,
+            attacker.individual.attack,
+            attacker.effort.attack,
+            attacker.level,
+            nature_boost
+        );
+
+        nature_boost=get_nature_boost("DEFENSE",defender.nature);
+        final_defense=real_value(
+            defender.specie.Defense,
+            defender.individual.defense,
+            defender.effort.defense,
+            defender.level,
+            nature_boost
+        );
     }else if(move.damage_class=="special"){
-        final_attack=attacker.s_attack();
-        final_defense=defender.s_defense();
+        nature_boost=get_nature_boost("S_ATTACK",attacker.nature);
+        final_attack=real_value(
+            attacker.specie.sAttack,
+            attacker.individual.s_attack,
+            attacker.effort.s_attack,
+            attacker.level,
+            nature_boost
+        );
+
+        nature_boost=get_nature_boost("S_DFENSE",defender.nature);
+        final_defense=real_value(
+            defender.specie.sDefense,
+            defender.individual.s_defense,
+            defender.effort.s_defense,
+            defender.level,
+            nature_boost
+        );
     }else if(move.damage_class=="status"){
         throw Error("変化技です");
     }else{
         throw Error("技がおかしいです");
     }
+
+    const defender_hp = real_value_hp(defender.specie.HP,defender.individual.hp,defender.effort.hp,defender.level);
 
     const final_power=move.power;   //技の最終威力
     const level_value=Math.floor(attacker.level*2/5)+2;  //levelに関する式
@@ -103,8 +136,8 @@ export const calc_damage = (attacker:Pokemon,defender:Pokemon,move:Move,critical
     }
     
     //ダメージの％化
-    const min_per = Math.round(min/defender.hp()*1000)/10;
-    const max_per = Math.round(max/defender.hp()*1000)/10;
+    const min_per = Math.round(min/defender_hp*1000)/10;
+    const max_per = Math.round(max/defender_hp*1000)/10;
 
     return {min,max,min_per,max_per}
 }

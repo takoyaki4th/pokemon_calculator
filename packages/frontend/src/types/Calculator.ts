@@ -4,7 +4,6 @@ import { Dispatch,SetStateAction } from "react";
 
 export type PokeData = {
     name:string,
-    dex_number:number,
     nature:Nature,
     level:LevelRange,
     individual:IndividualValue,

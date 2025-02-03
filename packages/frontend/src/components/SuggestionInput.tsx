@@ -1,32 +1,17 @@
 import { useState,FC, memo, useContext, useEffect, useRef} from "react";
-import { MyPokeFormContext,EnemyPokeFormContext } from "./providers/GlobalState";
-import axios from "axios";
+import { MyDexNumberContext,EnemyDexNumberContext} from "./providers/DexNumberProvider";
 import { MyOrEnemey } from "../types/MyOrEnemy";
 import { id_text } from "../types/id_text";
 import poke_list from "../data/sv_poke_list.json"
 
 const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
-    const {data,set_fn}=useContext((mode==="my" ? MyPokeFormContext:EnemyPokeFormContext));
+    const {dex_number,setDexNumber}=useContext((mode==="my" ? MyDexNumberContext:EnemyDexNumberContext));
     const options = useRef<Array<id_text>>(poke_list.data);
     const [text, setText] = useState<string>("");
     const [suggestions, setSuggestions] = useState<Array<id_text>>(poke_list.data);
     useEffect(()=>{
-        /*const get_options = async()=>{
-            try {
-                const response = await axios.get("api/Species/all_pokemon");
-                options.current=response.data;
-                setSuggestions(options.current);
-                let current_pokemon=options.current.find((option)=>{
-                    return data.dex_number===option.id;
-                }); 
-                setText(current_pokemon ? current_pokemon.name : "");
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        get_options();*/
         let current_pokemon=options.current.find((option)=>{
-            return data.dex_number===option.id;
+            return dex_number===option.id;
         }); 
         setText(current_pokemon ? current_pokemon.name : "");
 
@@ -51,7 +36,7 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 
     const handleInputBlur = ()=>{
         let current_pokemon=options.current.find((option)=>{
-            return data.dex_number===option.id;
+            return dex_number===option.id;
         }); 
         setText(current_pokemon ? current_pokemon.name : "")
         setIsFocus(false);
@@ -67,10 +52,7 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     };
 
     const handleLiClick = (suggestion:id_text)=>{
-        set_fn({
-            ...data,
-            dex_number:suggestion.id
-        });
+        setDexNumber(suggestion.id);
         setText(suggestion.name);
         setIsFocus(false);
         hasClick.current=false;

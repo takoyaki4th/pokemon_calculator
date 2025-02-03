@@ -4,7 +4,7 @@ import { isEffortRange, isIndividualRange, isLevelRange, statsToJa } from "../ut
 import { nature_key_array } from "../types/CalcConstant";
 import Options from "./Options";
 import SuggestionInput from "./SuggestionInput";
-import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/GlobalState";
+import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/PokeFormProvider";
 import { MyOrEnemey } from "../types/MyOrEnemy";
 
 //個体値のコンポーネント
@@ -28,10 +28,9 @@ const InputEffort:FC<{name:keyof EffortValue,value:EffortRange,onChange:(e:React
 });
 
 export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
-    console.log(mode);
     const {data,set_fn}=useContext((mode==="my" ? MyPokeFormContext:EnemyPokeFormContext));
 
-    //図鑑番号の変更
+    /*//図鑑番号の変更
     const handleDexNumChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
         const { value } = e.target;
         const value_to_num = parseInt(value);
@@ -42,7 +41,7 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
             ...data,
             dex_number:value_to_num
         });
-    };
+    };*/
 
     //levelの変更
     const handleLevelChange = (e:React.ChangeEvent<HTMLInputElement>) => {

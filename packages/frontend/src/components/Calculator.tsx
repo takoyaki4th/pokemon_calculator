@@ -1,22 +1,34 @@
 import { useState, useEffect, memo, useRef, FC, useContext} from "react";
 import { wrapGet } from "../utils/functions"
-import { Move } from "../types/Species";
+import { Move, Species } from "../types/Species";
 import { calc_damage } from "../utils/calcfunc"
-import { Pokemon } from "../types/Pokemon";
 import { DamageResult, PokeData } from "../types/Calculator";
 import { PokeForm } from "./PokeForm";
 import axios from "axios";
 import Options from "./Options";
-import { MyPokeFormContext,EnemyPokeFormContext } from "./providers/GlobalState";
+import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/PokeFormProvider";
+import { EnemyDexNumberContext, MyDexNumberContext } from "./providers/DexNumberProvider";
 
 const Calculator:FC = memo(() => {
     const [damage_result,setDamageResult] = useState<DamageResult>({min:0,max:0,min_per:0,max_per:0});
     //攻撃ポケモン
-    const my_poke = useRef<Pokemon>(new Pokemon("攻撃側のポケモンが設定されていません"));
+    const {dex_number:my_dex_number,setDexNumber:setMyDexNumber} = useContext(MyDexNumberContext);
+    const my_specie_value = useRef<Species>({
+        name:"ポケモンが設定されていません",
+        DexNumber:0,HP:0,Attack:0,Defense:0,sAttack:0,sDefense:0,Speed:0,
+        type1:"ノーマル",type2:"ノーマル",
+    });
     const {data:my_poke_form,set_fn:setMyPokeForm} = useContext(MyPokeFormContext);
+
     //防御ポケモン
-    const enemy_poke = useRef<Pokemon>(new Pokemon("防御側のポケモンが設定されていません"));
+    const {dex_number:enemy_dex_number,setDexNumber:setEnemyDexNumber} = useContext(EnemyDexNumberContext);
+    const enemy_specie_value = useRef<Species>({
+        name:"ポケモンが設定されていません",
+        DexNumber:0,HP:0,Attack:0,Defense:0,sAttack:0,sDefense:0,Speed:0,
+        type1:"ノーマル",type2:"ノーマル",
+    });
     const {data:enemy_poke_form,set_fn:setEnemyPokeForm} = useContext(EnemyPokeFormContext);
+
     //技
     const move_array = useRef<string[]>(["つるのムチ"]);
     const my_move = useRef<Move>({
@@ -26,46 +38,57 @@ const Calculator:FC = memo(() => {
         power:0,
         type:"ノーマル"
     });
-    const [move_form,setMoveForm] = useState<string>("つるのムチ");
+    const [move_name,setMoveName] = useState<string>("つるのムチ");
     //チェックボックス
-    const [checked, setChecked] = useState(false);
+    const [critical, setCritical] = useState(false);
 
-    useEffect(() =>{
-        const build = async()=>{
-            my_poke.current = await Pokemon.build(my_poke_form);
+    const calcAndSetDamage = ()=>{
+        const attacker = {
+            specie:my_specie_value.current,
+            ...my_poke_form
+        };
+        const defender = {
+            specie:enemy_specie_value.current,
+            ...enemy_poke_form
+        };
+        setDamageResult(calc_damage(attacker,defender,my_move.current,critical));
+    };
+
+    useEffect(()=>{
+        const get_specie = async()=>{
+            my_specie_value.current = await wrapGet(`/api/Species/${my_dex_number}`);
             try {
-                const res_moves = await axios<Array<{name:string}>>(`api/moveLearnMap/dex_number/${my_poke_form.dex_number}`);
+                const res_moves = await axios<Array<{name:string}>>(`api/moveLearnMap/dex_number/${my_dex_number}`);
                 const res_array = res_moves.data.map(move=> move.name);
                 move_array.current = res_array;
-                setMoveForm(move_array.current[0]);
+                setMoveName(res_array[0]);
+                calcAndSetDamage();
             } catch (error) {
                 console.log(error); 
             }
-            setDamageResult(calc_damage(my_poke.current,enemy_poke.current,my_move.current,checked));
-        }
-        build();
-    },[my_poke_form]);
+        };
+        get_specie();
+    },[my_dex_number]);
+
+    useEffect(()=>{
+        const get_specie = async()=>{
+            enemy_specie_value.current = await wrapGet(`/api/Species/${enemy_dex_number}`);
+            calcAndSetDamage();
+        };
+        get_specie();
+    },[enemy_dex_number]);
 
     useEffect(() =>{
         const build = async()=>{
-            enemy_poke.current = await Pokemon.build(enemy_poke_form);
-            setDamageResult(calc_damage(my_poke.current,enemy_poke.current,my_move.current,checked));
-        }
+            my_move.current = await wrapGet<Move>(`api/moves/name/${encodeURIComponent(move_name)}`);
+            calcAndSetDamage();
+        };
         build();
-    },[enemy_poke_form]);
+    },[move_name]);
 
-    useEffect(() =>{
-        const build = async()=>{
-            my_move.current = await wrapGet<Move>(`api/moves/name/${encodeURIComponent(move_form)}`);
-            setDamageResult(calc_damage(my_poke.current,enemy_poke.current,my_move.current,checked));
-        }
-        build();
-    },[move_form]);
-
-    const criticalHandler = ()=>{
-        setChecked(!checked);
-        setDamageResult(calc_damage(my_poke.current,enemy_poke.current,my_move.current,!checked));
-    };
+    useEffect(() => {
+        calcAndSetDamage();
+    },[my_poke_form,enemy_poke_form,critical]);
 
     console.log("レンダリングされました");
  
@@ -83,22 +106,22 @@ const Calculator:FC = memo(() => {
             </div>
             <div className="border">
                 <label>使用技</label>
-                <select name="move" value={move_form} onChange={event=>setMoveForm(event.target.value)}><Options array={move_array.current}/></select>
+                <select name="move" value={move_name} onChange={event=>setMoveName(event.target.value)}><Options array={move_array.current}/></select>
                 <label>急所</label>
-                <input type="checkbox" checked={checked} onChange={criticalHandler}/>
+                <input type="checkbox" checked={critical} onChange={()=>setCritical(!critical)}/>
             </div>
  
             <div className="border">
                 <div className="sprite-right">
-                   <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${enemy_poke_form.dex_number}.png`} alt={enemy_poke.current.specie.name} />
+                   <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${enemy_dex_number}.png`} alt={enemy_specie_value.current.name} />
                 </div>
                 <div className="sprite-left">
-                    <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${my_poke_form.dex_number}.png`} alt={my_poke.current.specie.name} />
+                    <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${my_dex_number}.png`} alt={my_specie_value.current.name} />
                 </div>
             </div>
             <div className="border">
-                <p>{my_poke.current.specie.name}の{my_move.current.name}攻撃!</p>
-                <p>{enemy_poke.current.specie.name}に{damage_result.min}〜{damage_result.max}ダメージ!</p>
+                <p>{my_specie_value.current.name}の{my_move.current.name}攻撃!</p>
+                <p>{enemy_specie_value.current.name}に{damage_result.min}〜{damage_result.max}ダメージ!</p>
                 <p>{damage_result.min_per}%〜{damage_result.max_per}%</p>
             </div>
         </div>
