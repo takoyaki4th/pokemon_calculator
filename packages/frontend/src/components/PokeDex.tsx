@@ -1,10 +1,13 @@
 import { useState,useEffect, useCallback, memo } from "react";
 import { Species } from "../types/Species";
 import { wrapGet } from "../utils/functions";
+import { useParams, useSearchParams } from "react-router-dom";
 
 const PokeDex:React.FC = memo(() => {
-    const [imageurl, setImageUrl] = useState<string>("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png");
-    const [DexNumber,setDexNumber] = useState<string>("1");
+    const [searchParams] = useSearchParams();
+    const id = searchParams.get("id") || "1";
+    const [imageurl, setImageUrl] = useState<string>(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`);
+    const [DexNumber,setDexNumber] = useState<string>(id);
     const [specie, setSpecie] = useState<Species>({
         DexNumber: 0,
         name: "ポケモンが設定されていません",
@@ -17,15 +20,14 @@ const PokeDex:React.FC = memo(() => {
         type1:"ノーマル",
         type2:null
     });
-    const [to_user, setToUser] = useState<string>("");
 
     useEffect(() => {
-    const GetSpecie = async () => {
-        const response=await wrapGet<Species>(`/api/Species/${DexNumber}`);
-        setSpecie(response);
-        setImageUrl(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${DexNumber}.png`);
-    }
-    GetSpecie();
+        const GetSpecie = async () => {
+            const response=await wrapGet<Species>(`/api/Species/${DexNumber}`);
+            setSpecie(response);
+            setImageUrl(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${DexNumber}.png`);
+        }
+        GetSpecie();
     }, [DexNumber]);
 
     //0以上,または図鑑の最大値を超えたときの処理を追記する 
@@ -44,7 +46,7 @@ const PokeDex:React.FC = memo(() => {
     return(
         <div className="container">
             <label>No.</label>
-            <input type="number" step="10" min="1" max="151"inputMode="numeric" value={DexNumber} onChange={event => setDexNumber(event.target.value)}/>
+            <input type="number" step="10" min="1" max="1025"inputMode="numeric" value={DexNumber} onChange={event => setDexNumber(event.target.value)}/>
             <h1>{specie.name}</h1>
             <img src={imageurl} alt={specie.name} />
             <div>
@@ -54,14 +56,14 @@ const PokeDex:React.FC = memo(() => {
                 <span>特攻:{specie.sDefense}</span>
                 <span>特防:{specie.sAttack}</span>
                 <span>速さ:{specie.Speed}</span>
-                <span>タイプ:{specie.type1},{specie.type2}</span>
+            </div>
+            <div>
+                <span>タイプ:{specie.type1}{specie.type2 ? ",":""}{specie.type2}</span>
             </div>
             <div>
                 <button onClick={handleOnPrev}>Prev-page</button>
                 <button onClick={handleOnNext}>Next-page</button>
             </div> 
-            <p>userへのメッセージ</p>
-            <p>{}</p>
         </div>
     );
 });

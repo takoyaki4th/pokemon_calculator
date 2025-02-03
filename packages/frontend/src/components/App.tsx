@@ -8,7 +8,7 @@ export const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Calculator/>}></Route>
-        <Route path="/poke-dex" element={<PokeDex />}></Route>
+        <Route path="/poke-dex/" element={<PokeDex />}></Route>
       </Routes>
     </Router>
   );

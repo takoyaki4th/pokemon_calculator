@@ -8,6 +8,7 @@ import axios from "axios";
 import Options from "./Options";
 import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/PokeFormProvider";
 import { EnemyDexNumberContext, MyDexNumberContext } from "./providers/DexNumberProvider";
+import { Link } from "react-router-dom";
 
 const Calculator:FC = memo(() => {
     const [damage_result,setDamageResult] = useState<DamageResult>({min:0,max:0,min_per:0,max_per:0});
@@ -113,10 +114,14 @@ const Calculator:FC = memo(() => {
  
             <div className="border">
                 <div className="sprite-right">
-                   <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${enemy_dex_number}.png`} alt={enemy_specie_value.current.name} />
+                    <Link to={`/poke-dex/?id=${enemy_dex_number}`}>
+                        <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${enemy_dex_number}.png`} alt={enemy_specie_value.current.name} />
+                    </Link>
                 </div>
                 <div className="sprite-left">
-                    <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${my_dex_number}.png`} alt={my_specie_value.current.name} />
+                    <Link to={`/poke-dex/?id=${my_dex_number}`}>
+                        <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${my_dex_number}.png`} alt={my_specie_value.current.name} />
+                    </Link>
                 </div>
             </div>
             <div className="border">

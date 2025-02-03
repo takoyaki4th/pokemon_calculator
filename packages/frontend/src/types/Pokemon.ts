@@ -1,9 +1,6 @@
 import { Species } from "./Species";
 import { Nature} from "./CalcConstant";
-import { get_nature_boost, real_value, real_value_hp } from "../utils/calcfunc"
 import { IntRange } from "./IntRange";
-import { wrapGet } from "../utils/functions";
-import { PokeData } from "./Calculator";
 
 
 //level
