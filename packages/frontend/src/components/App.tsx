@@ -5,11 +5,14 @@ import Calculator from "./Calculator";
 export const App = () => {
  
   return (
+    <>
     <Router>
       <Routes>
         <Route path="/" element={<Calculator/>}></Route>
         <Route path="/poke-dex/" element={<PokeDex />}></Route>
       </Routes>
     </Router>
+
+    </>
   );
 };

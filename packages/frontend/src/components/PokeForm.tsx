@@ -1,31 +1,14 @@
-import { FC, memo, useContext, useEffect } from "react";
-import { EffortRange, EffortValue, IndividualRange, IndividualValue } from "../types/Pokemon";
-import { isEffortRange, isIndividualRange, isLevelRange, statsToJa } from "../utils/functions";
+import { FC, memo, useContext} from "react";
+import { EffortRange, IndividualRange} from "../types/Pokemon";
+import { isEffortRange, isIndividualRange, isLevelRange} from "../utils/functions";
 import { nature_key_array } from "../types/CalcConstant";
-import Options from "./Options";
+import { Options } from "./Options";
 import SuggestionInput from "./SuggestionInput";
 import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/PokeFormProvider";
 import { MyOrEnemey } from "../types/MyOrEnemy";
-
-//個体値のコンポーネント
-const InputIndividual:FC<{name:keyof IndividualValue,value:IndividualRange,onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void}> = memo(({name,value,onChange}) => {
-    return(
-        <>
-        <label>{statsToJa(name)}</label>
-        <input type="number" name={name} step="1" min="0" max="31" inputMode="numeric" value={value} onChange={onChange}/>
-        </>
-    ); 
-});
-
-//努力値のコンポーネント
-const InputEffort:FC<{name:keyof EffortValue,value:EffortRange,onChange:(e:React.ChangeEvent<HTMLInputElement>)=>void}> = memo(({name,value,onChange}) => {
-    return(
-        <>
-        <label>{statsToJa(name)}</label>
-        <input className="effort-box" type="number" name={name} step="8" min="0" max="252" inputMode="numeric" value={value} onChange={onChange}/>
-        </>
-    ); 
-});
+import styled from "styled-components";
+import { InputEffort } from "./InputEffort";
+import { InputIndividual } from "./InputIndividual";
 
 export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     const {data,set_fn}=useContext((mode==="my" ? MyPokeFormContext:EnemyPokeFormContext));
@@ -94,7 +77,7 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 
     //性格の変更
     const handleNatureChange = (e:React.ChangeEvent<HTMLSelectElement>)=>{
-        const { name, value } = e.target;
+        const { value } = e.target;
         set_fn({
             ...data,
             nature:value
@@ -103,11 +86,11 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 
     return(
         <>
-        <div className="flex mb-5">
+        <SFlexDiv>
             <SuggestionInput mode={mode}/>
-        </div>
+        </SFlexDiv>
         <div>
-            <label>レベル</label>
+            <label>Lv</label>
             <input type="number" name="level" step="10" min="1" max="100"inputMode="numeric" value={data.level} onChange={handleLevelChange}/> 
             <label>性格</label>
             <select name="nature" onChange={handleNatureChange}><Options array={nature_key_array}/></select>
@@ -130,10 +113,14 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
             <InputEffort name="s_attack" value={data.effort.s_attack} onChange={handleEffortChange} />
             <InputEffort name="s_defense" value={data.effort.s_defense} onChange={handleEffortChange} />
         </div>
-        <div className="mb-5">
+        <div>
             <InputEffort name="hp" value={data.effort.hp} onChange={handleEffortChange}/>
             <InputEffort name="speed" value={data.effort.speed} onChange={handleEffortChange}/>
         </div>
         </>
     );
 });            
+
+const SFlexDiv= styled.div`
+    display:flex;
+`

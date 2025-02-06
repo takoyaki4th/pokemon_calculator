@@ -2,33 +2,33 @@ import { useState, useEffect, memo, useRef, FC, useContext} from "react";
 import { wrapGet } from "../utils/functions"
 import { Move, Species } from "../types/Species";
 import { calc_damage } from "../utils/calcfunc"
-import { DamageResult, PokeData } from "../types/Calculator";
-import { PokeForm } from "./PokeForm";
+import { DamageResult } from "../types/Calculator";
 import axios from "axios";
-import Options from "./Options";
+import { Options } from "./Options";
 import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/PokeFormProvider";
 import { EnemyDexNumberContext, MyDexNumberContext } from "./providers/DexNumberProvider";
-import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { WrapPokeForm } from "./WrapPokeForm";
 
 const Calculator:FC = memo(() => {
     const [damage_result,setDamageResult] = useState<DamageResult>({min:0,max:0,min_per:0,max_per:0});
     //攻撃ポケモン
-    const {dex_number:my_dex_number,setDexNumber:setMyDexNumber} = useContext(MyDexNumberContext);
+    const {dex_number:my_dex_number} = useContext(MyDexNumberContext);
     const my_specie_value = useRef<Species>({
         name:"ポケモンが設定されていません",
         DexNumber:0,HP:0,Attack:0,Defense:0,sAttack:0,sDefense:0,Speed:0,
         type1:"ノーマル",type2:"ノーマル",
     });
-    const {data:my_poke_form,set_fn:setMyPokeForm} = useContext(MyPokeFormContext);
+    const {data:my_poke_form} = useContext(MyPokeFormContext);
 
     //防御ポケモン
-    const {dex_number:enemy_dex_number,setDexNumber:setEnemyDexNumber} = useContext(EnemyDexNumberContext);
+    const {dex_number:enemy_dex_number} = useContext(EnemyDexNumberContext);
     const enemy_specie_value = useRef<Species>({
         name:"ポケモンが設定されていません",
         DexNumber:0,HP:0,Attack:0,Defense:0,sAttack:0,sDefense:0,Speed:0,
         type1:"ノーマル",type2:"ノーマル",
     });
-    const {data:enemy_poke_form,set_fn:setEnemyPokeForm} = useContext(EnemyPokeFormContext);
+    const {data:enemy_poke_form} = useContext(EnemyPokeFormContext);
 
     //技
     const move_array = useRef<string[]>(["つるのムチ"]);
@@ -94,43 +94,42 @@ const Calculator:FC = memo(() => {
     console.log("レンダリングされました");
  
     return(
-        <div className="container">
-            <div className="flex">
-                <div className="center border">
-                    <h3>攻撃ポケモン</h3>
-                    <PokeForm key="my" mode="my"/>
-                </div>
-                <div className="center border">
-                    <h3>防御ポケモン</h3>
-                    <PokeForm key="enemy" mode="enemy"/>
-                </div>
-            </div>
-            <div className="border">
+        <SContainer>
+            <SFlexDiv>
+                <WrapPokeForm mode="my" name={my_specie_value.current.name}/>
+                <WrapPokeForm mode="enemy" name={enemy_specie_value.current.name}/>
+            </SFlexDiv>
+            <SBorder>
                 <label>使用技</label>
                 <select name="move" value={move_name} onChange={event=>setMoveName(event.target.value)}><Options array={move_array.current}/></select>
                 <label>急所</label>
                 <input type="checkbox" checked={critical} onChange={()=>setCritical(!critical)}/>
-            </div>
- 
-            <div className="border">
-                <div className="sprite-right">
-                    <Link to={`/poke-dex/?id=${enemy_dex_number}`}>
-                        <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${enemy_dex_number}.png`} alt={enemy_specie_value.current.name} />
-                    </Link>
-                </div>
-                <div className="sprite-left">
-                    <Link to={`/poke-dex/?id=${my_dex_number}`}>
-                        <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/${my_dex_number}.png`} alt={my_specie_value.current.name} />
-                    </Link>
-                </div>
-            </div>
-            <div className="border">
+            </SBorder>
+            <SBorder>
                 <p>{my_specie_value.current.name}の{my_move.current.name}攻撃!</p>
                 <p>{enemy_specie_value.current.name}に{damage_result.min}〜{damage_result.max}ダメージ!</p>
                 <p>{damage_result.min_per}%〜{damage_result.max_per}%</p>
-            </div>
-        </div>
+            </SBorder>
+        </SContainer>
     )
 });
+
+const SContainer = styled.div`
+    margin: auto;
+    width: 100vw;
+    max-width: 1000px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+`
+
+const SFlexDiv = styled.div`
+    display:flex
+`
+const SBorder = styled.div`
+    border:1px solid #000;
+    padding:5px;
+    margin:5px;
+`
 
 export default Calculator;

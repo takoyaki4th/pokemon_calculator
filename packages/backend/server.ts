@@ -32,7 +32,7 @@ async function startServer(){
 
         console.log('connected to study_db');
 
-        app.listen(PORT,() =>{
+        app.listen(PORT,'0.0.0.0',() =>{
             console.log('start listening');
         });
         

@@ -1,7 +1,8 @@
 import { useState,useEffect, useCallback, memo } from "react";
 import { Species } from "../types/Species";
 import { wrapGet } from "../utils/functions";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import styled from "styled-components";
 
 const PokeDex:React.FC = memo(() => {
     const [searchParams] = useSearchParams();
@@ -44,7 +45,7 @@ const PokeDex:React.FC = memo(() => {
     },[]);
 
     return(
-        <div className="container">
+        <SContainer>
             <label>No.</label>
             <input type="number" step="10" min="1" max="1025"inputMode="numeric" value={DexNumber} onChange={event => setDexNumber(event.target.value)}/>
             <h1>{specie.name}</h1>
@@ -64,8 +65,17 @@ const PokeDex:React.FC = memo(() => {
                 <button onClick={handleOnPrev}>Prev-page</button>
                 <button onClick={handleOnNext}>Next-page</button>
             </div> 
-        </div>
+        </SContainer>
     );
 });
+
+const SContainer = styled.div`
+    margin: auto;
+    width: 100vw;
+    max-width: 1000px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+`
 
 export default PokeDex;
