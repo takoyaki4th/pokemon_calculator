@@ -6,18 +6,25 @@ import styled from "styled-components";
 
 export const WrapPokeForm:FC<{mode:MyOrEnemey,name:string}> = ({mode,name})=>{
     return(
-        <SDiv>
-            <PokeImage key={mode} mode={mode} name={name}/>
-            <PokeForm key={mode} mode={mode}/>
+        <SDiv mode={mode}>
+            <PokeImage key={mode+"_image"} mode={mode} name={name}/>
+            <PokeForm key={mode+"_form"} mode={mode}/>
         </SDiv>
     );
 };
 
-const SDiv=styled.div`
-    border:1px solid #000;
-    padding:5px;
+const SDiv=styled.div<{mode:MyOrEnemey}>`
+    border-radius:13px 3px 13px 3px;
+    box-shadow:2px 3px 6px rgba(0,0,0,0.5);
+    padding:3px;
     margin:5px;
     display:flex;
     align-items:center;
     flex-direction:column;
+    width:290px;
+    background-color:     #FFFFFF;
+
+    @media(max-width:768px) {
+        width: calc(50% - 20px);
+    }
 `

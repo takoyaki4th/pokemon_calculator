@@ -10,13 +10,15 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     const options = useRef<Array<id_text>>(poke_list.data);
     const [text, setText] = useState<string>("");
     const [suggestions, setSuggestions] = useState<Array<id_text>>(poke_list.data);
+    const inputRef = useRef<HTMLInputElement>(null);
+
     useEffect(()=>{
         let current_pokemon=options.current.find((option)=>{
             return dex_number===option.id;
         }); 
         setText(current_pokemon ? current_pokemon.name : "");
 
-    });
+    },[]);
 
     const [isFocus, setIsFocus] = useState(false); 
     const hasClick = useRef(false);
@@ -61,32 +63,41 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 
     return(
         <>
-        <label>ポケモン</label>
         <SDiv>
-        <input
-            type="text" value={text}
-            onFocus={() => setIsFocus(true)} 
-            onBlur={handleInputBlur}  
-            onChange={(e) => handleInputChange(e.target.value)}
-        />
-        {(isFocus || hasClick.current) && (
-            <SUl>
-                {suggestions.map((suggestion,i) => (
-                    <SLi key={suggestion.id} onMouseDown={handleLiMouseDown} onClick={()=>handleLiClick(suggestion)}>
-                        {suggestion.name}
-                    </SLi>
-                ))}
-            </SUl>
-        )}
+            <SInput
+                ref={inputRef}
+                type="text" value={text}
+                onFocus={() => {
+                    setIsFocus(true);
+                    inputRef.current?.select();
+                }} 
+                onBlur={handleInputBlur}  
+                onChange={(e) => handleInputChange(e.target.value)}
+            />
+            {(isFocus || hasClick.current) && (
+                <SUl>
+                    {suggestions.map((suggestion,i) => (
+                        <SLi key={suggestion.id} onMouseDown={handleLiMouseDown} onClick={()=>handleLiClick(suggestion)}>
+                            {suggestion.name}
+                        </SLi>
+                    ))}
+                </SUl>
+            )}
         </SDiv>
         </>
     );
 });
 
 const SDiv = styled.div`
+    display:flex;
+    flex-direction:column;
+    align-items:center;
     position: relative;
     top:0;
     left:0;
+`
+const SInput = styled.input`
+    width:80%;
 `
 
 const SUl = styled.ul`
@@ -95,9 +106,9 @@ const SUl = styled.ul`
     position: absolute;
     top: 100%;
     left: 0;
-    font-size: 13px;
+    z-index:1;
     list-style-type: none;
-    padding: 0;  /* インデントも削除 */
+    padding: 0;
     margin:0;
     background-color: #F1F1F1;
     border: #707070 solid 1px;

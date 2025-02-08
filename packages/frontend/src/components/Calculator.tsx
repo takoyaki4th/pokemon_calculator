@@ -95,6 +95,10 @@ const Calculator:FC = memo(() => {
  
     return(
         <SContainer>
+            <SBorder>
+                <p>{damage_result.min}〜{damage_result.max}ダメージ!</p>
+                <p>{damage_result.min_per}%〜{damage_result.max_per}%</p>
+            </SBorder>             
             <SFlexDiv>
                 <WrapPokeForm mode="my" name={my_specie_value.current.name}/>
                 <WrapPokeForm mode="enemy" name={enemy_specie_value.current.name}/>
@@ -105,18 +109,14 @@ const Calculator:FC = memo(() => {
                 <label>急所</label>
                 <input type="checkbox" checked={critical} onChange={()=>setCritical(!critical)}/>
             </SBorder>
-            <SBorder>
-                <p>{my_specie_value.current.name}の{my_move.current.name}攻撃!</p>
-                <p>{enemy_specie_value.current.name}に{damage_result.min}〜{damage_result.max}ダメージ!</p>
-                <p>{damage_result.min_per}%〜{damage_result.max_per}%</p>
-            </SBorder>
         </SContainer>
-    )
+    );
 });
 
 const SContainer = styled.div`
     margin: auto;
-    width: 100vw;
+    width: calc(100vw -4px);
+    height:calc100vh;
     max-width: 1000px;
     display: flex;
     align-items: center;
@@ -124,12 +124,22 @@ const SContainer = styled.div`
 `
 
 const SFlexDiv = styled.div`
-    display:flex
+    display:flex;
+    width:100%;
+    margin-left:6px;
+
+    @media(min-width:767px) {
+        justify-content:center;
+    }
 `
 const SBorder = styled.div`
-    border:1px solid #000;
-    padding:5px;
+    width:90%;
+    border:1px solid lightgray;
+    padding:10px;
     margin:5px;
+    background-color:white;
+    box-shadow:2px 2px 5px rgba(0,0,0,0.3);
+    border-radius:10px;
 `
 
 export default Calculator;
