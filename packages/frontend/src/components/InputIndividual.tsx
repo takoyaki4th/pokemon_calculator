@@ -41,16 +41,36 @@ const SDiv = styled.div`
     z-index:0;
 `
 const SInput=styled.input`
-    margin-top:5px;
+    text-align:center;
     width:50px;
+    margin-top:5px;
+    margin:5px 6px 0 6px;
+
+    @media(max-width:768px){
+        padding:5px;
+        width:30px;
+    }
 `
 const SLabel = styled.label`
     background-color:white; 
-    padding:0 4px;
     position:absolute;
-    border-radius:5px;
-    top:-5px;
+    top:-10px;
+    padding:2px;
     left:50%;
     transform:translateX(-50%);
     white-space:nowrap;
+
+    @media(max-width:768px){
+        font-size:11px;
+        padding:0 1px;
+        top:-2px;
+    }
+`
+
+const SButton = styled.button`
+    width:30px;
+    height:30px;
+    border-radius:15px;
+    border:1px solid lightgray; 
+    box-shadow:2px 2px 4px rgba(0,0,0,0.3);
 `

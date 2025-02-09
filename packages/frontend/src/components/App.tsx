@@ -9,20 +9,22 @@ const GlobalStyle = createGlobalStyle`
     background-color:#f3f6f9;
     height:100vh;
   }
+
   input{
     font-size:18px;
     border-radius: 10px;
-    padding:7px;
+    padding:7px 3px;
     border: 1px solid lightgray;
-    box-shadow:2px 2px 5px rgba(0,0,0,0.3);
+    box-shadow:inset 1px 1px 4px rgba(0,0,0,0.3);
   }
+    
   select{
     font-size:18px;
     border-radius: 10px;
     background-color:white;
     padding:5px;
     border: 1px solid lightgray;
-    box-shadow:2px 2px 5px rgba(0,0,0,0.3);
+    box-shadow:inset 1px 1px 4px rgba(0,0,0,0.3);
   }
 
   @media(max-width:768px){

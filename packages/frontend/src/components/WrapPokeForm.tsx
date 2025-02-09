@@ -16,8 +16,8 @@ export const WrapPokeForm:FC<{mode:MyOrEnemey,name:string}> = ({mode,name})=>{
 const SDiv=styled.div<{mode:MyOrEnemey}>`
     border-radius:13px 3px 13px 3px;
     box-shadow:2px 3px 6px rgba(0,0,0,0.5);
-    padding:3px;
-    margin:5px;
+    padding: 5px 3px 15px 3px;
+    margin:0 10px;
     display:flex;
     align-items:center;
     flex-direction:column;
@@ -25,6 +25,7 @@ const SDiv=styled.div<{mode:MyOrEnemey}>`
     background-color:     #FFFFFF;
 
     @media(max-width:768px) {
-        width: calc(50% - 20px);
+        margin:6px;
+        width: calc(50% - 12px);
     }
 `

@@ -130,7 +130,7 @@ export const calc_damage = (attacker:Pokemon,defender:Pokemon,move:Move,critical
     max = calc_type_affinity(max,move.type,defender.specie.type1,defender.specie.type2);
 
     //ダメージが1以下なら1にする処理を追記
-    if(min<1){
+    if(min!=0 && min<1){
         min=1;
         if(max<1) max=1;
     }

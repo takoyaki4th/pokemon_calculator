@@ -1,6 +1,6 @@
 import { FC, memo, useContext, useState} from "react";
-import { EffortRange, IndividualRange} from "../types/Pokemon";
-import { isEffortRange, isIndividualRange, isLevelRange} from "../utils/functions";
+import { IndividualRange} from "../types/Pokemon";
+import { isIndividualRange, isLevelRange} from "../utils/functions";
 import { nature_key_array } from "../types/CalcConstant";
 import { Options } from "./Options";
 import SuggestionInput from "./SuggestionInput";
@@ -9,40 +9,10 @@ import { MyOrEnemey } from "../types/MyOrEnemy";
 import styled from "styled-components";
 import { InputEffort } from "./InputEffort";
 import { InputIndividual } from "./InputIndividual";
+import { InputLevel } from "./InputLevel";
 
 export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     const {data,set_fn}=useContext((mode==="my" ? MyPokeFormContext:EnemyPokeFormContext));
-
-    //levelの変更
-    const handleLevelChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-        const value_to_num = parseInt(value);
-        if(!(isLevelRange(value_to_num))){
-            throw Error("値がlevelになりません");
-        } 
-        set_fn({
-            ...data,
-            level:value_to_num
-        });
-    };
-
-    //個体値の変更
-    const handleIndividualChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
-        const { name, value } = e.target;
-        const value_to_num = parseInt(value);
-        if(!(isIndividualRange(value_to_num))){
-            throw Error("値がlevelになりません");
-        }
-        //set_fnの中での型判定が効いていないのでこの文で判定する
-        const indivi_value:IndividualRange = value_to_num;
-        set_fn({
-            ...data,
-            individual:{
-                ...data.individual,
-                [name]:indivi_value
-            }
-        });
-    };
 
     //性格の変更
     const handleNatureChange = (e:React.ChangeEvent<HTMLSelectElement>)=>{
@@ -74,15 +44,18 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
         </SFlexDiv>
         <SButton onClick={()=>setIsOpen(!is_open)}>+   細かく設定する</SButton>
         <SDrawer is_open={is_open}>
-            <label>Lv</label>
-            <input type="number" name="level" step="10" min="1" max="100"inputMode="numeric" value={data.level} onChange={handleLevelChange}/> 
+            <InputLevel mode={mode} />
             <SP>個体値</SP>
-            <InputIndividual mode={mode} name="attack" />
-            <InputIndividual mode={mode} name="s_attack" />
-            <InputIndividual mode={mode} name="speed" />
-            <InputIndividual mode={mode} name="hp" />
-            <InputIndividual mode={mode} name="defense" />
-            <InputIndividual mode={mode} name="s_defense" />
+            <SIndiviContainer>
+                <InputIndividual mode={mode} name="attack" />
+                <InputIndividual mode={mode} name="s_attack" />
+                <InputIndividual mode={mode} name="speed" />
+            </SIndiviContainer>
+            <SIndiviContainer>
+                <InputIndividual mode={mode} name="hp" />
+                <InputIndividual mode={mode} name="defense" />
+                <InputIndividual mode={mode} name="s_defense" />
+            </SIndiviContainer>
             <SP>努力値</SP>
             <InputEffort mode={mode} name="attack" />
             <InputEffort mode={mode} name="s_attack" />
@@ -97,12 +70,17 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 
 const SFlexDiv= styled.div`
     display:flex;
-    margin-bottom:7px;
+    margin-bottom:20px;
+    align-items:center;
+    flex-direction:column;
 
-    @media (max-width:768px){
-        align-items:center;
-        flex-direction:column;
+    @media(max-width:768px){
+        margin-bottom:10px;
     }
+`
+
+const SIndiviContainer = styled.div`
+    display:flex;
 `
 
 const SDrawer = styled.div<{is_open:boolean}>`

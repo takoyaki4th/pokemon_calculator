@@ -96,18 +96,21 @@ const Calculator:FC = memo(() => {
     return(
         <SContainer>
             <SBorder>
-                <p>{damage_result.min}〜{damage_result.max}ダメージ!</p>
-                <p>{damage_result.min_per}%〜{damage_result.max_per}%</p>
+                <p><SSpan>{damage_result.min}</SSpan> 〜 <SSpan>{damage_result.max}</SSpan> ダメージ！！</p>
+                <p><SSpan>{damage_result.min_per}%</SSpan> 〜 <SSpan>{damage_result.max_per}%</SSpan></p>
             </SBorder>             
             <SFlexDiv>
                 <WrapPokeForm mode="my" name={my_specie_value.current.name}/>
                 <WrapPokeForm mode="enemy" name={enemy_specie_value.current.name}/>
             </SFlexDiv>
             <SBorder>
+                <div>
                 <label>使用技</label>
                 <select name="move" value={move_name} onChange={event=>setMoveName(event.target.value)}><Options array={move_array.current}/></select>
                 <label>急所</label>
                 <input type="checkbox" checked={critical} onChange={()=>setCritical(!critical)}/>
+
+                </div>
             </SBorder>
         </SContainer>
     );
@@ -126,13 +129,15 @@ const SContainer = styled.div`
 const SFlexDiv = styled.div`
     display:flex;
     width:100%;
-    margin-left:6px;
 
     @media(min-width:767px) {
         justify-content:center;
     }
 `
 const SBorder = styled.div`
+    display:flex;
+    flex-direction:column;
+    align-items:center;
     width:90%;
     border:1px solid lightgray;
     padding:10px;
@@ -140,6 +145,10 @@ const SBorder = styled.div`
     background-color:white;
     box-shadow:2px 2px 5px rgba(0,0,0,0.3);
     border-radius:10px;
+`
+
+const SSpan = styled.span`
+    font-size:20px;
 `
 
 export default Calculator;
