@@ -13,7 +13,7 @@ const GlobalStyle = createGlobalStyle`
   input{
     font-size:18px;
     border-radius: 10px;
-    padding:7px 3px;
+    padding:6px 2px;
     border: 1px solid lightgray;
     box-shadow:inset 1px 1px 4px rgba(0,0,0,0.3);
   }
@@ -31,9 +31,6 @@ const GlobalStyle = createGlobalStyle`
     body{
       font-size:15px;  
       padding:0 2px 0 2px;
-    }
-    p{
-      margin: 5px 0 0 0;
     }
   }  
 `

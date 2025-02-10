@@ -1,20 +1,26 @@
 import { useState,FC, memo, useContext, useEffect, useRef} from "react";
-import { MyDexNumberContext,EnemyDexNumberContext} from "./providers/DexNumberProvider";
+import { MySpecieContext,EnemySpecieContext} from "./providers/SpecieProvider";
 import { MyOrEnemey } from "../types/MyOrEnemy";
-import { id_text } from "../types/id_text";
+import { id_name } from "../types/id_text";
 import poke_list from "../data/sv_poke_list.json"
 import styled from "styled-components";
+import { wrapGet } from "../utils/functions";
+import { Move, Species } from "../types/Species";
+import axios from "axios";
+import { MyMoveContext } from "./providers/MoveProvider";
 
 const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
-    const {dex_number,setDexNumber}=useContext((mode==="my" ? MyDexNumberContext:EnemyDexNumberContext));
-    const options = useRef<Array<id_text>>(poke_list.data);
+    const {specie,setSpecie}=useContext((mode==="my" ? MySpecieContext:EnemySpecieContext));
+    const {setMyMove,move_array} = useContext(MyMoveContext);
+
+    const options = useRef<Array<id_name>>(poke_list.data);
     const [text, setText] = useState<string>("");
-    const [suggestions, setSuggestions] = useState<Array<id_text>>(poke_list.data);
+    const [suggestions, setSuggestions] = useState<Array<id_name>>(poke_list.data);
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(()=>{
         let current_pokemon=options.current.find((option)=>{
-            return dex_number===option.id;
+            return specie.DexNumber===option.id;
         }); 
         setText(current_pokemon ? current_pokemon.name : "");
 
@@ -24,7 +30,7 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     const hasClick = useRef(false);
 
     const handleInputChange = (text:string) => {
-        let matches:Array<id_text> = [];
+        let matches:Array<id_name> = [];
         if (text.length > 0) {
             matches = options.current.filter((opt) => {
                 const regex = new RegExp(`${text}`, "gi");
@@ -39,7 +45,7 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 
     const handleInputBlur = ()=>{
         let current_pokemon=options.current.find((option)=>{
-            return dex_number===option.id;
+            return specie.DexNumber===option.id;
         }); 
         setText(current_pokemon ? current_pokemon.name : "")
         setIsFocus(false);
@@ -54,8 +60,21 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
         document.addEventListener('mouseup',listener,true);
     };
 
-    const handleLiClick = (suggestion:id_text)=>{
-        setDexNumber(suggestion.id);
+    const handleLiClick = (suggestion:id_name)=>{
+        const get_specie = async()=> {
+            const res_specie = await wrapGet<Species>(`/api/Species/${suggestion.id}`);
+            try {
+                const res_moves = await axios<Array<id_name>>(`api/moveLearnMap/dex_number/${suggestion.id}`);
+                const res_array = res_moves.data.map(({id,name})=> ({id,name}));
+                move_array.current = res_array;
+                const res_move = await wrapGet<Move>(`api/moves/id/${res_array[0].id}`);
+                setSpecie(res_specie);
+                setMyMove(res_move);
+            } catch (error) {
+                console.log(error); 
+            }
+        }
+        get_specie();
         setText(suggestion.name);
         setIsFocus(false);
         hasClick.current=false;

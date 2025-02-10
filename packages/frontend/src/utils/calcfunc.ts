@@ -2,13 +2,14 @@ import { Stat,Nature,NatureObjs, TYPE_AFFINITY, TYPE_NUM, Type } from "../types/
 import { EffortRange, IndividualRange, LevelRange, Pokemon } from "../types/Pokemon"
 import { Move } from "../types/Species"
 import { DamageResult } from "../types/Calculator"
+import { NatureBoosted } from "../types/NatureBoosted"
 
 const MULTIPLIER_BASE=4096
 const MULTIPLIER_1_5X=6144
 const MULTIPLIER_2_X=8192
 
 //statに応じた正確補正値を返す
-export const get_nature_boost=(stat:Stat,nature:Nature) => {
+export const get_nature_boost=(stat:Stat,nature:Nature):NatureBoosted => {
     if(NatureObjs[nature].boosted==stat){
         return 1.1  //x1.1倍の補正を返す
     }else if(NatureObjs[nature].lowered==stat){
@@ -23,7 +24,7 @@ export const real_value_hp=(base_stat:number,individual:IndividualRange,effort:E
     return Math.floor((base_stat*2+individual+effort/4)*(level/100)+10+level)
 }
 
-export const real_value=(base_stat:number,individual:IndividualRange,effort:EffortRange,level:LevelRange,nature_boost:number)=>{
+export const real_value=(base_stat:number,individual:IndividualRange,effort:EffortRange,level:LevelRange,nature_boost:NatureBoosted)=>{
     return Math.floor(((base_stat*2+individual+effort/4)*(level/100)+5)*nature_boost)
 }
 
@@ -60,7 +61,7 @@ const calc_type_affinity=(current_damage:number,move_type:Type,defender_type1:Ty
 export const calc_damage = (attacker:Pokemon,defender:Pokemon,move:Move,critical:boolean=false):DamageResult=>{
     let final_attack=0;
     let final_defense=0;
-    let nature_boost=1;
+    let nature_boost:NatureBoosted=1;
 
     //技が特殊か物理かで最終攻撃と防御を決める
     if(move.damage_class=="physical"){

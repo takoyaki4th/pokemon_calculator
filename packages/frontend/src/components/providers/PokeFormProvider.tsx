@@ -1,4 +1,4 @@
-import { createContext, Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
+import { createContext, FC, ReactNode, useState } from "react";
 import { FormStatePair, PokeData } from "../../types/Calculator";
 
 //型として定義しなければ使えないのでasを使って型を定義する

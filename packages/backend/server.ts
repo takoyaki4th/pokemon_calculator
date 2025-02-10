@@ -32,7 +32,7 @@ async function startServer(){
 
         console.log('connected to study_db');
 
-        app.listen(PORT,'0.0.0.0',() =>{
+        app.listen(PORT,() =>{
             console.log('start listening');
         });
         
@@ -155,7 +155,7 @@ app.get('/api/moveLearnMap/id/:id',wrapAsync(async(req:Request,res:Response) =>{
 
 app.get('/api/moveLearnMap/dex_number/:dex_number',wrapAsync(async(req:Request,res:Response)=>{
     const [rows,fields] = await connection.query(
-        'SELECT name FROM moves WHERE damage_class != "status" AND id IN(SELECT move_id FROM moveLearnMap WHERE dex_number = :dex_number)',
+        'SELECT id,name FROM moves WHERE damage_class != "status" AND id IN(SELECT move_id FROM moveLearnMap WHERE dex_number = :dex_number)',
         {dex_number:req.params.dex_number}
     );
     res.status(200).json(rows);

@@ -47,7 +47,7 @@ const SInput=styled.input`
 
 const SLabel = styled.label`
     background-color:white; 
-    padding:0 4px;
+    padding:0 2px;
     position:absolute;
     border-radius:5px;
     top:-5px;

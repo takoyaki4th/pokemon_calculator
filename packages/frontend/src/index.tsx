@@ -2,8 +2,9 @@ import ReactDOM from 'react-dom/client';
 import 'normalize.css';
 import './index.css';
 import {App} from './components/App';
-import { DexNumberProvider } from './components/providers/DexNumberProvider';
+import { SpecieProvider } from './components/providers/SpecieProvider';
 import { PokeFormProvider } from './components/providers/PokeFormProvider';
+import { MoveProvider } from './components/providers/MoveProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,10 +12,12 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <>
-    <DexNumberProvider>
+    <SpecieProvider>
       <PokeFormProvider>
-        <App />
+        <MoveProvider>
+          <App />
+        </MoveProvider>
       </PokeFormProvider>
-    </DexNumberProvider>
+    </SpecieProvider>
   </>
 );

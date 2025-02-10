@@ -1,7 +1,5 @@
 import { FC, memo, useContext, useState} from "react";
-import { IndividualRange} from "../types/Pokemon";
-import { isIndividualRange, isLevelRange} from "../utils/functions";
-import { nature_key_array } from "../types/CalcConstant";
+import { Nature, nature_key_array } from "../types/CalcConstant";
 import { Options } from "./Options";
 import SuggestionInput from "./SuggestionInput";
 import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/PokeFormProvider";
@@ -10,16 +8,22 @@ import styled from "styled-components";
 import { InputEffort } from "./InputEffort";
 import { InputIndividual } from "./InputIndividual";
 import { InputLevel } from "./InputLevel";
+import { SelectNatureBoost } from "./SelectNatureBoost";
+import { MyMoveContext } from "./providers/MoveProvider";
+import { SelectMove } from "./SelectMove";
 
 export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     const {data,set_fn}=useContext((mode==="my" ? MyPokeFormContext:EnemyPokeFormContext));
+    const {my_move} = useContext(MyMoveContext);
 
     //性格の変更
     const handleNatureChange = (e:React.ChangeEvent<HTMLSelectElement>)=>{
         const { value } = e.target;
+        //型判定がないので注意
+        const nature=value as Nature;
         set_fn({
             ...data,
-            nature:value
+            nature:nature
         });
     };
 
@@ -28,23 +32,31 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     return(
         <>
         <SuggestionInput key={mode+"_suggesution"}mode={mode}/>
-        <SP>性格</SP>
-        <select name="nature" onChange={handleNatureChange}><Options array={nature_key_array}/></select>
+        { mode === "my" ? <SelectMove/> :""}
         <SP>努力値</SP>
         <SFlexDiv>
             {
-                mode==="my" ? 
-                    <><InputEffort mode={mode} name="attack"/>
-                    <InputEffort mode={mode} name="s_attack"/></>
+                mode==="my" ?
+                    my_move.damage_class==="physical" ? 
+                        <InputEffort mode={mode} name="attack"/>
+                        :
+                        <InputEffort mode={mode} name="s_attack"/>
                     :
-                    <><InputEffort mode={mode} name="hp" />
-                    <InputEffort mode={mode} name="defense"  />
-                    <InputEffort mode={mode} name="s_defense"/></>
+                    <>
+                    <InputEffort mode={mode} name="hp" />
+                    {my_move.damage_class==="physical" ?
+                        <InputEffort mode={mode} name="defense"  />
+                        :
+                        <InputEffort mode={mode} name="s_defense"/>}
+                    </>
             }
         </SFlexDiv>
+        <SelectNatureBoost mode={mode}></SelectNatureBoost>
         <SButton onClick={()=>setIsOpen(!is_open)}>+   細かく設定する</SButton>
         <SDrawer is_open={is_open}>
             <InputLevel mode={mode} />
+            <SP>性格</SP>
+            <select name="nature" value={data.nature} onChange={handleNatureChange}><Options array={nature_key_array}/></select>
             <SP>個体値</SP>
             <SIndiviContainer>
                 <InputIndividual mode={mode} name="attack" />
@@ -70,7 +82,6 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 
 const SFlexDiv= styled.div`
     display:flex;
-    margin-bottom:20px;
     align-items:center;
     flex-direction:column;
 
@@ -94,6 +105,7 @@ const SP = styled.p`
         font-size:12px;
         font-weight:normal; 
         color:#808080;
+        margin:5px 0 0 0;
     }
 `
 
@@ -102,7 +114,7 @@ const SButton = styled.button`
     font-size:12px;
     padding:4px 0 0 0;
     width:80%;
-    margin:auto 0 5px 0;
+    margin:auto 0 0 0;
     border:none;
     background-color:white;
     border-top:1px solid #808080;

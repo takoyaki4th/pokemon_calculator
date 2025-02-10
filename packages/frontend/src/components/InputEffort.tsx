@@ -74,7 +74,7 @@ export const InputEffort: FC<{ mode: MyOrEnemey, name: keyof EffortValue }> = me
 });
 
 const SDiv = styled.div`
-    margin-top:10px;
+    margin-top:12px;
     position:relative;
     z-index:0;
 `
@@ -86,6 +86,7 @@ const SInput = styled.input`
 `
 
 const SLabel = styled.label`
+    font-size:13px;
     background-color:white; 
     padding:0 2px;
     position:absolute;

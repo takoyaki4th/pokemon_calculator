@@ -12,17 +12,8 @@ const Stat={
 //結果enumのような挙動をしている
 export type Stat = typeof Stat[keyof typeof Stat]; 
 
-type NatureObjType={
-    boosted:Stat|null;
-    lowered:Stat|null;
-};
-
-type NatureObjsType={
-    [key:string]:NatureObjType;
-};
-
 //正確一覧とその補正値の一覧
-export const NatureObjs:NatureObjsType={
+export const NatureObjs={
     "さみしがり"    :   {   boosted:"ATTACK",   lowered:"DEFENSE"   },
     "いじっぱり"    :   {   boosted:"ATTACK",   lowered:"S_ATTACK"  },
     "やんちゃ"      :   {   boosted:"ATTACK",   lowered:"S_DFENSE"  },

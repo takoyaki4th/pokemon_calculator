@@ -4,10 +4,10 @@ import { PokeForm } from "./PokeForm";
 import { MyOrEnemey } from "../types/MyOrEnemy";
 import styled from "styled-components";
 
-export const WrapPokeForm:FC<{mode:MyOrEnemey,name:string}> = ({mode,name})=>{
+export const WrapPokeForm:FC<{mode:MyOrEnemey}> = ({mode})=>{
     return(
         <SDiv mode={mode}>
-            <PokeImage key={mode+"_image"} mode={mode} name={name}/>
+            <PokeImage key={mode+"_image"} mode={mode} />
             <PokeForm key={mode+"_form"} mode={mode}/>
         </SDiv>
     );

@@ -1,1 +1,1 @@
-export type id_text = {id:number,name:string};
+export type id_name = {id:number,name:string};
