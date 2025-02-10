@@ -22,7 +22,8 @@ const SDiv=styled.div<{mode:MyOrEnemey}>`
     align-items:center;
     flex-direction:column;
     width:290px;
-    background-color:     #FFFFFF;
+    background-color: #FFFFFF;
+    justify-cotent:space-between;
 
     @media(max-width:768px) {
         margin:6px;

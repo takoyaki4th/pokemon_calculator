@@ -52,7 +52,7 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
             }
         </SFlexDiv>
         <SelectNatureBoost mode={mode}></SelectNatureBoost>
-        <SButton onClick={()=>setIsOpen(!is_open)}>+   細かく設定する</SButton>
+        <SButton mode={mode} onClick={()=>setIsOpen(!is_open)}>+   細かく設定する</SButton>
         <SDrawer is_open={is_open}>
             <InputLevel mode={mode} />
             <SP>性格</SP>
@@ -109,13 +109,16 @@ const SP = styled.p`
     }
 `
 
-const SButton = styled.button`
+const SButton = styled.button<{mode:MyOrEnemey}>`
     color: #808080;
     font-size:12px;
     padding:4px 0 0 0;
     width:80%;
-    margin:auto 0 0 0;
     border:none;
     background-color:white;
     border-top:1px solid #808080;
+
+    @media(min-width:768px){
+        margin-top:${({mode})=>(mode==="my" ? "0px": "40px")};
+    }
 `

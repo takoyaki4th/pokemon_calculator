@@ -7,7 +7,7 @@ const GlobalStyle = createGlobalStyle`
   body{
     font-weight:bold;
     background-color:#f3f6f9;
-    height:100vh;
+    padding-bottom:100px;
   }
 
   input{

@@ -40,17 +40,15 @@ const Calculator:FC = () => {
             <SBorder>
                 <p><SSpan>{min}</SSpan> 〜 <SSpan>{max}</SSpan> ダメージ！！</p>
                 <p><SSpan>{min_per}%</SSpan> 〜 <SSpan>{max_per}%</SSpan></p>
+                <SDiv>
+                    <label>急所</label>
+                    <input type="checkbox" checked={critical} onChange={()=>setCritical(!critical)}/>
+                </SDiv>
             </SBorder>             
             <SFlexDiv>
                 <WrapPokeForm mode="my" />
                 <WrapPokeForm mode="enemy"/>
             </SFlexDiv>
-            <SBorder>
-                <div>
-                   <label>急所</label>
-                    <input type="checkbox" checked={critical} onChange={()=>setCritical(!critical)}/>
-                </div>
-            </SBorder>
         </SContainer>
     );
 };
@@ -68,6 +66,7 @@ const SContainer = styled.div`
 const SFlexDiv = styled.div`
     display:flex;
     width:100%;
+    align-items:flex-start;
 
     @media(min-width:767px) {
         justify-content:center;
@@ -80,14 +79,20 @@ const SBorder = styled.div`
     width:90%;
     border:1px solid lightgray;
     padding:10px;
-    margin:5px;
+    margin:50px 5px 5px 5px;
     background-color:white;
     box-shadow:2px 2px 5px rgba(0,0,0,0.3);
     border-radius:10px;
+    position:relative;
 `
 
 const SSpan = styled.span`
     font-size:20px;
+`
+const SDiv = styled.div`
+    position:absolute;
+    right:10%;
+    top:60%;
 `
 
 export default Calculator;

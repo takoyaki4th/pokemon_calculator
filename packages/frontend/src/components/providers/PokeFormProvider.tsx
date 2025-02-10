@@ -15,7 +15,7 @@ export const PokeFormProvider:FC<{children:ReactNode}> = (props) =>{
 
     const [my_poke_form,setMyPokeForm] = useState<PokeData>({
         name:"ニックネーム",
-        nature:"わんぱく",
+        nature:"ようき",
         level:50,
         individual:{hp:31,attack:31,defense:31,s_attack:31,s_defense:31,speed:31},
         effort:{hp:0,attack:252,defense:0,s_attack:252,s_defense:0,speed:0}
@@ -23,7 +23,7 @@ export const PokeFormProvider:FC<{children:ReactNode}> = (props) =>{
 
     const [enemy_poke_form,setEnemyPokeForm] = useState<PokeData>({
         name:"ニックネーム",
-        nature:"わんぱく",
+        nature:"ようき",
         level:50,
         individual:{hp:31,attack:31,defense:31,s_attack:31,s_defense:31,speed:31},
         effort:{hp:0,attack:252,defense:0,s_attack:252,s_defense:0,speed:0}
