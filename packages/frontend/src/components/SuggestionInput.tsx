@@ -23,7 +23,6 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
             return specie.DexNumber===option.id;
         }); 
         setText(current_pokemon ? current_pokemon.name : "");
-
     },[]);
 
     const [isFocus, setIsFocus] = useState(false); 
@@ -63,15 +62,17 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     const handleLiClick = (suggestion:id_name)=>{
         const get_specie = async()=> {
             const res_specie = await wrapGet<Species>(`/api/Species/${suggestion.id}`);
-            try {
-                const res_moves = await axios<Array<id_name>>(`api/moveLearnMap/dex_number/${suggestion.id}`);
-                const res_array = res_moves.data.map(({id,name})=> ({id,name}));
-                move_array.current = res_array;
-                const res_move = await wrapGet<Move>(`api/moves/id/${res_array[0].id}`);
-                setSpecie(res_specie);
-                setMyMove(res_move);
-            } catch (error) {
-                console.log(error); 
+            setSpecie(res_specie);
+            if(mode==="my"){
+                try {
+                    const res_moves = await axios<Array<id_name>>(`api/moveLearnMap/dex_number/${suggestion.id}`);
+                    const res_array = res_moves.data.map(({id,name})=> ({id,name}));
+                    move_array.current = res_array;
+                    const res_move = await wrapGet<Move>(`api/moves/id/${res_array[0].id}`);
+                    setMyMove(res_move);
+                } catch (error) {
+                    console.log(error); 
+                }
             }
         }
         get_specie();
