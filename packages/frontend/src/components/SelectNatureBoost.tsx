@@ -76,6 +76,7 @@ export const SelectNatureBoost:FC<{mode:MyOrEnemey}> = ({mode})=>{
 
 const SFlex = styled.div`
     display:flex;
+    align-items:center;
     margin:10px 0 0 0;
     margin:20px;
 `
@@ -83,23 +84,26 @@ const SFlex = styled.div`
 const SDiv = styled.div`
     display:flex;
     align-items:center;
-    height:30px;
+    height:25px;
     border:1px solid lightgray;
+    font-size:12px;
+    padding:0 5px;
 `
 
-const SButton = {
+const sButton = {
     padding:'5px',
     border:'1px solid lightgray',
-    boxShadow:'2px 2px 4px rgba(0,0,0,0.3)'
+    boxShadow:'2px 2px 4px rgba(0,0,0,0.3)',
+    height:'30px'
 }
 
 const SX0_9 = styled.button<{nature_boosted:NatureBoosted}>`
     color:${({nature_boosted}) => (nature_boosted!==0.9 ? "black" : "blue")};
     border-radius:10px 0 0 10px;
-    ${SButton}
+    ${sButton}
 `
 const SX1_1 = styled.button<{nature_boosted:NatureBoosted}>`
     color:${({nature_boosted}) => (nature_boosted!==1.1 ? "black" : "red")};
     border-radius:0 10px 10px 0;
-    ${SButton}
+    ${sButton}
 `
