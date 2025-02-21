@@ -16,6 +16,7 @@ const GlobalStyle = createGlobalStyle`
     padding:6px 2px;
     border: 1px solid lightgray;
     box-shadow:inset 1px 1px 4px rgba(0,0,0,0.3);
+    text-align:center;
   }
     
   select{
@@ -25,6 +26,7 @@ const GlobalStyle = createGlobalStyle`
     padding:5px;
     border: 1px solid lightgray;
     box-shadow:inset 1px 1px 4px rgba(0,0,0,0.3);
+    text-align:center;
   }
 
   @media(max-width:768px){

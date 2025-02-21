@@ -5,6 +5,7 @@ import { EnemySpecieContext, MySpecieContext } from "./providers/SpecieProvider"
 import styled from "styled-components";
 import { WrapPokeForm } from "./WrapPokeForm";
 import { MyMoveContext} from "./providers/MoveProvider";
+import checkIcon from "../assets/check.svg"
 
 const Calculator:FC = () => {
     //攻撃ポケモン
@@ -40,11 +41,12 @@ const Calculator:FC = () => {
             <SBorder>
                 <p><SSpan>{min}</SSpan> 〜 <SSpan>{max}</SSpan> ダメージ！！</p>
                 <p><SSpan>{min_per}%</SSpan> 〜 <SSpan>{max_per}%</SSpan></p>
-                <SDiv>
-                    <label>急所</label>
-                    <input type="checkbox" checked={critical} onChange={()=>setCritical(!critical)}/>
-                </SDiv>
             </SBorder>             
+            <SDiv>
+                <SCheckBox type="checkbox" checked={critical} onChange={()=>setCritical(!critical)}/>
+                <span/>
+                <label>急所</label>
+            </SDiv>
             <SFlexDiv>
                 <WrapPokeForm mode="my" />
                 <WrapPokeForm mode="enemy"/>
@@ -83,16 +85,34 @@ const SBorder = styled.div`
     background-color:white;
     box-shadow:2px 2px 5px rgba(0,0,0,0.3);
     border-radius:10px;
-    position:relative;
 `
 
 const SSpan = styled.span`
     font-size:20px;
 `
 const SDiv = styled.div`
-    position:absolute;
-    right:10%;
-    top:60%;
+    padding:5px;
+    display:flex;
+    justify-content:center;
+`
+
+const SCheckBox = styled.input.attrs({ type: "checkbox" })`
+    appearance:none;
+    width:19px;
+    height:19px;
+    margin-right:5px;
+    border:1px solid black;    
+    border-radius:3px;
+    box-shadow:none;
+    position:relative;
+
+    &:checked{
+        border:none;
+        background-color:blue;
+        background-image:url(${checkIcon});
+        background-no-repeat;
+        background-position:0 1px;
+    }
 `
 
 export default Calculator;

@@ -82,7 +82,6 @@ const SDiv = styled.div`
 const SInput = styled.input`
     margin:5px 8px 0 8px;
     width:50px;
-    text-align:center;
 `
 
 const SLabel = styled.label`

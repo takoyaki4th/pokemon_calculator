@@ -41,7 +41,6 @@ const SDiv = styled.div`
     z-index:0;
 `
 const SInput=styled.input`
-    text-align:center;
     width:50px;
     margin-top:5px;
     margin:5px 6px 0 6px;

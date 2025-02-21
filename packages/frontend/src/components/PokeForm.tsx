@@ -31,27 +31,29 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 
     return(
         <>
-        <SuggestionInput key={mode+"_suggesution"}mode={mode}/>
-        { mode === "my" ? <SelectMove/> :""}
-        <SP>努力値</SP>
-        <SFlexDiv>
-            {
-                mode==="my" ?
-                    my_move.damage_class==="physical" ? 
-                        <InputEffort mode={mode} name="attack"/>
+        <SContainer >
+            <SuggestionInput key={mode+"_suggesution"}mode={mode}/>
+            { mode === "my" ? <SelectMove/> :""}
+            <SP>努力値</SP>
+            <SFlexDiv>
+                {
+                    mode==="my" ?
+                        my_move.damage_class==="physical" ? 
+                            <InputEffort mode={mode} name="attack"/>
+                            :
+                            <InputEffort mode={mode} name="s_attack"/>
                         :
-                        <InputEffort mode={mode} name="s_attack"/>
-                    :
-                    <>
-                    <InputEffort mode={mode} name="hp" />
-                    {my_move.damage_class==="physical" ?
-                        <InputEffort mode={mode} name="defense"  />
-                        :
-                        <InputEffort mode={mode} name="s_defense"/>}
-                    </>
-            }
-        </SFlexDiv>
-        <SelectNatureBoost mode={mode}></SelectNatureBoost>
+                        <>
+                        <InputEffort mode={mode} name="hp" />
+                        {my_move.damage_class==="physical" ?
+                            <InputEffort mode={mode} name="defense"  />
+                            :
+                            <InputEffort mode={mode} name="s_defense"/>}
+                        </>
+                }
+            </SFlexDiv>
+            <SelectNatureBoost mode={mode}/>
+        </SContainer>
         <SButton mode={mode} onClick={()=>setIsOpen(!is_open)}>+   細かく設定する</SButton>
         <SDrawer is_open={is_open}>
             <InputLevel mode={mode} />
@@ -80,6 +82,16 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     );
 });            
 
+const SContainer=styled.div`
+    height:40vh;
+    display:flex;
+    align-items:center;
+    flex-direction:column;
+
+    @media (max-width:768px) {
+        height:35vh;
+    }
+`
 const SFlexDiv= styled.div`
     display:flex;
     align-items:center;
@@ -118,7 +130,4 @@ const SButton = styled.button<{mode:MyOrEnemey}>`
     background-color:white;
     border-top:1px solid #808080;
 
-    @media(min-width:768px){
-        margin-top:${({mode})=>(mode==="my" ? "0px": "40px")};
-    }
 `

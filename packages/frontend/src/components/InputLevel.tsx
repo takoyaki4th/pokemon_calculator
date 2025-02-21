@@ -40,7 +40,6 @@ const SDiv=styled.div`
 `
 
 const SInput=styled.input`
-    text-align:center;
     margin-top:5px;
     width:50px;
 `

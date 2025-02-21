@@ -117,7 +117,6 @@ const SDiv = styled.div`
     left:0;
 `
 const SInput = styled.input`
-    text-align:center;
     width:80%;
 `
 
