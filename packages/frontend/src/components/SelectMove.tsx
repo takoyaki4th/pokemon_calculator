@@ -6,6 +6,7 @@ import { wrapGet } from "../utils/functions";
 import { Move } from "../types/Species";
 import { MySpecieContext } from "./providers/SpecieProvider";
 import styled from "styled-components";
+import { title } from "../styles/styles";
 
 //性格もidで操作するようにしたらOptionコンポーネントとして切り出す
 const MoveOptions:FC<{array:Array<id_name>}> = memo(({array})=> {
@@ -53,10 +54,8 @@ export const SelectMove:FC = ()=>{
 
 const SLabel = styled.label`
     margin:20px;
+    ${title}
     @media(max-width:768px){
-        font-size:12px;
-        font-weight:normal; 
-        color:#808080;
         margin:5px 0;
     }
 `

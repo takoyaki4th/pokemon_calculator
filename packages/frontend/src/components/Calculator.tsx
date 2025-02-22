@@ -30,7 +30,7 @@ export const Calculator:FC= ()=>{
         ...enemy_poke_form,
         specie:enemy_specie
     };
-    const {min,max,min_per,max_per} = calc_damage(attacker,defender,my_move,corrections.critical);
+    const {min,max,min_per,max_per} = calc_damage(attacker,defender,my_move,corrections);
 
     return(
         <>

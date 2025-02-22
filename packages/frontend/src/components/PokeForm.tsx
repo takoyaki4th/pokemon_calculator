@@ -5,13 +5,14 @@ import SuggestionInput from "./SuggestionInput";
 import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/PokeFormProvider";
 import { MyOrEnemey } from "../types/MyOrEnemy";
 import styled from "styled-components";
+import { title } from "../styles/styles"
 import { InputEffort } from "./InputEffort";
 import { InputIndividual } from "./InputIndividual";
 import { InputLevel } from "./InputLevel";
 import { SelectNatureBoost } from "./SelectNatureBoost";
 import { MyMoveContext } from "./providers/MoveProvider";
 import { SelectMove } from "./SelectMove";
-import { Rank } from "./Rank";
+import { RankForm } from "./RankForm";
 
 export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     const {data,set_fn}=useContext((mode==="my" ? MyPokeFormContext:EnemyPokeFormContext));
@@ -54,7 +55,7 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
                 }
             </SFlexDiv>
         </SContainer>
-        <Rank mode="my" name="attack"></Rank>
+        <RankForm mode={mode}/>
         <SelectNatureBoost mode={mode}/>
         <SButton mode={mode} onClick={()=>setIsOpen(!is_open)}>+   細かく設定する</SButton>
         <SDrawer is_open={is_open}>
@@ -85,14 +86,11 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 });            
 
 const SContainer=styled.div`
-    height:30vh;
+    height:25vh;
     display:flex;
     align-items:center;
     flex-direction:column;
-
-    @media (max-width:768px) {
-        height:25vh;
-    }
+    justify-content:space-around;
 `
 const SFlexDiv= styled.div`
     display:flex;
@@ -115,12 +113,7 @@ const SDrawer = styled.div<{is_open:boolean}>`
 `
 
 const SP = styled.p`
-    @media(max-width:768px){
-        font-size:12px;
-        font-weight:normal; 
-        color:#808080;
-        margin:5px 0 0 0;
-    }
+    ${title}
 `
 
 const SButton = styled.button<{mode:MyOrEnemey}>`
