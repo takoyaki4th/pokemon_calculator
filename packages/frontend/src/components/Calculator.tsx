@@ -1,13 +1,12 @@
-import { useState, FC, useContext} from "react";
-import { calc_damage } from "../utils/calcfunc"
-import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/PokeFormProvider";
+import { FC, useContext, useState } from "react";
 import { EnemySpecieContext, MySpecieContext } from "./providers/SpecieProvider";
+import { EnemyPokeFormContext, MyPokeFormContext } from "./providers/PokeFormProvider";
+import { MyMoveContext } from "./providers/MoveProvider";
+import { calc_damage } from "../utils/calcfunc";
 import styled from "styled-components";
-import { WrapPokeForm } from "./WrapPokeForm";
-import { MyMoveContext} from "./providers/MoveProvider";
 import checkIcon from "../assets/check.svg"
 
-const Calculator:FC = () => {
+export const Calculator:FC= ()=>{
     //攻撃ポケモン
     const {specie:my_specie} = useContext(MySpecieContext);
     const {data:my_poke_form} = useContext(MyPokeFormContext);
@@ -22,7 +21,6 @@ const Calculator:FC = () => {
     //チェックボックス
     const [critical, setCritical] = useState(false);
 
-    
     //コンポーネント分けたほうが良いかも
     const attacker = {
         ...my_poke_form,
@@ -34,46 +32,21 @@ const Calculator:FC = () => {
     };
     const {min,max,min_per,max_per} = calc_damage(attacker,defender,my_move,critical);
 
-    console.log("レンダリングされました");
- 
     return(
-        <SContainer>
+        <>
             <SBorder>
                 <p><SSpan>{min}</SSpan> 〜 <SSpan>{max}</SSpan> ダメージ！！</p>
                 <p><SSpan>{min_per}%</SSpan> 〜 <SSpan>{max_per}%</SSpan></p>
             </SBorder>             
             <SDiv>
                 <SCheckBox type="checkbox" checked={critical} onChange={()=>setCritical(!critical)}/>
-                <span/>
                 <label>急所</label>
             </SDiv>
-            <SFlexDiv>
-                <WrapPokeForm mode="my" />
-                <WrapPokeForm mode="enemy"/>
-            </SFlexDiv>
-        </SContainer>
+        </>
     );
+ 
 };
 
-const SContainer = styled.div`
-    margin: auto;
-    width: calc(100vw -4px);
-    height:calc100vh;
-    max-width: 1000px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-`
-
-const SFlexDiv = styled.div`
-    display:flex;
-    width:100%;
-    align-items:flex-start;
-
-    @media(min-width:767px) {
-        justify-content:center;
-    }
-`
 const SBorder = styled.div`
     display:flex;
     flex-direction:column;
@@ -114,5 +87,3 @@ const SCheckBox = styled.input.attrs({ type: "checkbox" })`
         background-position:0 1px;
     }
 `
-
-export default Calculator;

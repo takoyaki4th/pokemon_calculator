@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PokeDex from "./PokeDex";
-import Calculator from "./Calculator";
+import Root from "./Root";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -44,7 +44,7 @@ export const App = () => {
     <Router>
       <GlobalStyle/>
       <Routes>
-        <Route path="/" element={<Calculator/>}></Route>
+        <Route path="/" element={<Root/>}></Route>
         <Route path="/poke-dex/" element={<PokeDex />}></Route>
       </Routes>
     </Router>
