@@ -11,6 +11,7 @@ import { InputLevel } from "./InputLevel";
 import { SelectNatureBoost } from "./SelectNatureBoost";
 import { MyMoveContext } from "./providers/MoveProvider";
 import { SelectMove } from "./SelectMove";
+import { Rank } from "./Rank";
 
 export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     const {data,set_fn}=useContext((mode==="my" ? MyPokeFormContext:EnemyPokeFormContext));
@@ -52,8 +53,9 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
                         </>
                 }
             </SFlexDiv>
-            <SelectNatureBoost mode={mode}/>
         </SContainer>
+        <Rank mode="my" name="attack"></Rank>
+        <SelectNatureBoost mode={mode}/>
         <SButton mode={mode} onClick={()=>setIsOpen(!is_open)}>+   細かく設定する</SButton>
         <SDrawer is_open={is_open}>
             <InputLevel mode={mode} />
@@ -83,13 +85,13 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 });            
 
 const SContainer=styled.div`
-    height:40vh;
+    height:30vh;
     display:flex;
     align-items:center;
     flex-direction:column;
 
     @media (max-width:768px) {
-        height:35vh;
+        height:25vh;
     }
 `
 const SFlexDiv= styled.div`

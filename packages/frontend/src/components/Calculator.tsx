@@ -5,6 +5,7 @@ import { MyMoveContext } from "./providers/MoveProvider";
 import { calc_damage } from "../utils/calcfunc";
 import styled from "styled-components";
 import checkIcon from "../assets/check.svg"
+import { CorrectionsContext } from "./providers/CorrectionsProvider";
 
 export const Calculator:FC= ()=>{
     //攻撃ポケモン
@@ -19,9 +20,8 @@ export const Calculator:FC= ()=>{
     const {my_move} = useContext(MyMoveContext);
 
     //チェックボックス
-    const [critical, setCritical] = useState(false);
+    const {corrections, setCorrections} = useContext(CorrectionsContext);
 
-    //コンポーネント分けたほうが良いかも
     const attacker = {
         ...my_poke_form,
         specie:my_specie
@@ -30,7 +30,7 @@ export const Calculator:FC= ()=>{
         ...enemy_poke_form,
         specie:enemy_specie
     };
-    const {min,max,min_per,max_per} = calc_damage(attacker,defender,my_move,critical);
+    const {min,max,min_per,max_per} = calc_damage(attacker,defender,my_move,corrections.critical);
 
     return(
         <>
@@ -39,7 +39,13 @@ export const Calculator:FC= ()=>{
                 <p><SSpan>{min_per}%</SSpan> 〜 <SSpan>{max_per}%</SSpan></p>
             </SBorder>             
             <SDiv>
-                <SCheckBox type="checkbox" checked={critical} onChange={()=>setCritical(!critical)}/>
+                <SCheckBox type="checkbox" checked={corrections.critical} 
+                    onChange={()=>{
+                        setCorrections({
+                            ...corrections,
+                            critical:!corrections.critical    
+                        })
+                }}/>
                 <label>急所</label>
             </SDiv>
         </>

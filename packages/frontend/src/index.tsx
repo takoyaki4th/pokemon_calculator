@@ -5,6 +5,7 @@ import {App} from './components/App';
 import { SpecieProvider } from './components/providers/SpecieProvider';
 import { PokeFormProvider } from './components/providers/PokeFormProvider';
 import { MoveProvider } from './components/providers/MoveProvider';
+import { CorrectionsProvider } from './components/providers/CorrectionsProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,12 +13,14 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <>
-    <SpecieProvider>
-      <PokeFormProvider>
-        <MoveProvider>
-          <App />
-        </MoveProvider>
-      </PokeFormProvider>
-    </SpecieProvider>
+    <CorrectionsProvider>
+      <SpecieProvider>
+        <PokeFormProvider>
+          <MoveProvider>
+            <App />
+          </MoveProvider>
+        </PokeFormProvider>
+      </SpecieProvider>
+    </CorrectionsProvider>
   </>
 );
