@@ -156,6 +156,9 @@ export const calc_damage = (attacker:Pokemon,defender:Pokemon,move:Move,correcti
     if(min!=IS_0_NUMBER && min<1){
         min=1;
         if(max<1) max=1;
+    }else if(min===IS_0_NUMBER){
+        min=0;
+        if(max===IS_0_NUMBER) max=0;
     }
     
     //ダメージの％化

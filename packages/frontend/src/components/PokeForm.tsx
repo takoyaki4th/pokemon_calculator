@@ -29,7 +29,7 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
         });
     };
 
-    const [ is_open,setIsOpen] = useState<boolean>(false);
+    const [ is_open,setIsOpen ] = useState<boolean>(false);
 
     return(
         <>
@@ -92,6 +92,7 @@ const SContainer=styled.div`
     flex-direction:column;
     justify-content:space-around;
 `
+
 const SFlexDiv= styled.div`
     display:flex;
     align-items:center;
