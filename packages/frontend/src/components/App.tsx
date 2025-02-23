@@ -8,25 +8,34 @@ const GlobalStyle = createGlobalStyle`
     font-weight:bold;
     background-color:#f3f6f9;
     padding-bottom:100px;
+    appearance:none;
+    font-size:18px;
+  }
+
+  button,input,textarea,select{
+    appearance:none;
+    -webkit-appearance: none;
+    color: black;
+    text-align:center;
+    border:none;
+    padding:0;
+  }
+
+  input,select{
+    border: 1px solid lightgray;
+    box-shadow:inset 1px 1px 4px rgba(0,0,0,0.3);
+    text-align-last:center;
   }
 
   input{
-    font-size:18px;
     border-radius: 10px;
     padding:6px 2px;
-    border: 1px solid lightgray;
-    box-shadow:inset 1px 1px 4px rgba(0,0,0,0.3);
-    text-align:center;
   }
     
   select{
-    font-size:18px;
     border-radius: 10px;
     background-color:white;
     padding:5px;
-    border: 1px solid lightgray;
-    box-shadow:inset 1px 1px 4px rgba(0,0,0,0.3);
-    text-align:center;
   }
 
   @media(max-width:768px){

@@ -55,14 +55,13 @@ export const SelectMove:FC = ()=>{
 const SLabel = styled.label`
     margin:20px;
     ${title}
+
     @media(max-width:768px){
         margin:5px 0;
     }
 `
 
 const SSelect = styled.select`
-    text-align:center;
-
     @media(max-width:768px){
         font-size:15px
     }

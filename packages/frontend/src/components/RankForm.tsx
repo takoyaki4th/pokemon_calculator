@@ -58,8 +58,8 @@ const SSpan = styled.span`
 `
 
 const button = {
-    width:'17px',
-    height:'20px',
+    width:'20px',
+    height:'23px',
     border:'1px solid lightgray',
     backgroundColor:'gray',
 };

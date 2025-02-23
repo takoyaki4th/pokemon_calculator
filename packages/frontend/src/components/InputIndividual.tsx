@@ -58,18 +58,11 @@ const SLabel = styled.label`
     left:50%;
     transform:translateX(-50%);
     white-space:nowrap;
+    font-size:13px;
 
     @media(max-width:768px){
         font-size:11px;
         padding:0 1px;
         top:-2px;
     }
-`
-
-const SButton = styled.button`
-    width:30px;
-    height:30px;
-    border-radius:15px;
-    border:1px solid lightgray; 
-    box-shadow:2px 2px 4px rgba(0,0,0,0.3);
 `

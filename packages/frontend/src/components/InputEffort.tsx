@@ -4,6 +4,7 @@ import { isEffortRange, statsToJa } from "../utils/functions";
 import styled from "styled-components";
 import { MyOrEnemey } from "../types/MyOrEnemy";
 import { useNumInput } from "./hooks/useNumInput";
+import { label } from "../styles/styles";
 
 export const InputEffort: FC<{ mode: MyOrEnemey, name: keyof EffortValue }> = memo(({ mode, name }) => {
     const { inputRef, data, set_fn, withHandler } = useNumInput(mode);
@@ -85,14 +86,7 @@ const SInput = styled.input`
 `
 
 const SLabel = styled.label`
-    font-size:13px;
-    background-color:white; 
-    padding:0 2px;
-    position:absolute;
-    top:-5px;
-    left:50%;
-    transform:translateX(-50%);
-    white-space:nowrap;
+    ${label}
 `
 
 const SButton = styled.button`

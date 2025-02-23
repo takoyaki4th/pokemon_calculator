@@ -86,7 +86,7 @@ export const PokeForm:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
 });            
 
 const SContainer=styled.div`
-    height:25vh;
+    height:27vh;
     display:flex;
     align-items:center;
     flex-direction:column;
