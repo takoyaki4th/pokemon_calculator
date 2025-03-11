@@ -2,12 +2,13 @@ import { FC } from "react";
 import styled from "styled-components";
 import { WrapPokeForm } from "./WrapPokeForm";
 import { Calculator } from "./Calculator";
+import { Timer } from "./Timer"
 
 const Root:FC = () => {
-    console.log("レンダリングされました");
  
     return(
         <SContainer>
+            <Timer/>
             <Calculator/>
             <SFlexDiv>
                 <WrapPokeForm mode="my" />
@@ -20,7 +21,7 @@ const Root:FC = () => {
 const SContainer = styled.div`
     margin: auto;
     width: calc(100vw -4px);
-    height:calc100vh;
+    height:100vh;
     max-width: 1000px;
     display: flex;
     align-items: center;
