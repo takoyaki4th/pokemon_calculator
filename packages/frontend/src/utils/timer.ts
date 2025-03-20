@@ -1,8 +1,9 @@
-let startTime;
-let elapsedTime=0;
-let timerInterval;
+import { Dispatch, SetStateAction } from "react";
 
-export function timeToString(time , mode=":") {
+let elapsedTime=0;
+let timerInterval:NodeJS.Timer;
+
+export function timeToString(time:number , mode:string=":") {
   const diffInHrs = time / 3600000;
   const hh = Math.floor(diffInHrs);
 
@@ -30,8 +31,8 @@ export function getElapsedTime(){
   return elapsedTime;
 }
 
-export function startTimer(setElapsedTime) {
-  startTime = Date.now() - elapsedTime;
+export function startTimer(setElapsedTime:Dispatch<SetStateAction<string>>,) {
+  const startTime = Date.now() - elapsedTime;
   timerInterval = setInterval(function printTime() {
       elapsedTime = Date.now() - startTime;
       setElapsedTime(timeToString(elapsedTime));
@@ -46,26 +47,4 @@ export function resetTimer() {
   clearInterval(timerInterval);
   elapsedTime = 0;
   return timeToString(elapsedTime);
-}
-
-export async function sendData(url, sendedData, processResponse) {
-  try {
-    const options = {
-      method: "POST",
-      headers: {},
-    };
-    
-    if (sendedData) {
-      options.headers['Content-Type'] = 'application/json';
-      options.body = JSON.stringify(sendedData);
-    }
-
-    const response = await fetch(url, options);
-    const data = await response.json();
-
-    processResponse(data);
-
-  } catch (error) {
-      console.error("Error:", error);
-  }
 }
