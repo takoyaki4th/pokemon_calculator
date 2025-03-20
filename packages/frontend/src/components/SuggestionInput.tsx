@@ -14,9 +14,9 @@ const SuggestionInput:FC<{mode:MyOrEnemey}> = memo(({mode})=>{
     const {specie,setSpecie}=useContext((mode==="my" ? MySpecieContext:EnemySpecieContext));
     const {setMyMove,move_array} = useContext(MyMoveContext);
 
-    const options = useRef<Array<id_name>>(poke_list.data);
+    const options = useRef<Array<id_name>>(/*[{id:1,name:'リザードン'},{id:2,name:'アルセウス'}]*/poke_list.data);
     const [text, setText] = useState<string>("");
-    const [suggestions, setSuggestions] = useState<Array<id_name>>(poke_list.data);
+    const [suggestions, setSuggestions] = useState<Array<id_name>>(/*[{id:1,name:'リザードン'},{id:2,name:'アルセウス'}]*/poke_list.data);
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(()=>{

@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import {startTimer,stopTimer,resetTimer} from "../utils/timer"
 import styled from "styled-components";
+import { white_box } from "../styles/styles";
 
 export const Timer:FC=()=>{
     const [isStart,setIsStart] = useState(true);
@@ -17,14 +18,32 @@ export const Timer:FC=()=>{
     };
 
     return (
-        <>
-            <StartStopButton type="button" onClick={handleOnStartStop}><p id="Timer">{elapsedTime}</p>{isStart ? 'Start': 'Stop' }</StartStopButton>
-            <button type="button" onClick={ () => setElapsedTime(resetTimer())}>取消</button>
-        </>
+        <SDiv>
+            <StartStopButton type="button" onClick={handleOnStartStop}><SSpan>{elapsedTime}</SSpan>{isStart ? 'Start': 'Stop' }</StartStopButton>
+            <SButton type="button" onClick={ () => setElapsedTime(resetTimer())}>Reset</SButton>
+        </SDiv>
     )
 }
 
+const SSpan=styled.span`
+    font-size:30px;
+`
+
+const SDiv=styled.div`
+    position:relative;
+`
+const SButton=styled.button`
+    position:absolute;
+    top:50%;
+    left:-5px;
+    transform:translate(-100%,-50%);
+    ${white_box}
+`
+
 const StartStopButton=styled.button`
-    font-size: 30px;
-    width: 45%;
+    font-size: 18px;
+    width: 60vw;
+    display:flex;
+    flex-direction:column;
+    ${white_box}
 `

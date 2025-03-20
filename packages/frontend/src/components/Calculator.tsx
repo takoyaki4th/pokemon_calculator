@@ -57,13 +57,17 @@ const SBorder = styled.div`
     display:flex;
     flex-direction:column;
     align-items:center;
-    width:90%;
+    width:600px;
     border:1px solid lightgray;
-    padding:10px;
-    margin:50px 5px 5px 5px;
+    padding:7px;
+    margin:5px 5px 0px 5px;
     background-color:white;
     box-shadow:2px 2px 5px rgba(0,0,0,0.3);
     border-radius:10px;
+
+    @media(max-width:768px){
+        width:90%;
+    }
 `
 
 const SSpan = styled.span`
