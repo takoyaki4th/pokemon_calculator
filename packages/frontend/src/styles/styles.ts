@@ -17,3 +17,12 @@ export const label = css`
     transform:translateX(-50%);
     white-space:nowrap
 `;
+
+export const white_box = css`
+    border:1px solid lightgray;
+    background:white;
+    box-shadow:2px 2px 5px rgba(0,0,0,0.3);
+    border-radius:10px;
+    margin:5px 0px;
+    padding:10px;
+`;

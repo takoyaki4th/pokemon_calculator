@@ -26,7 +26,7 @@ const SDiv=styled.div<{mode:MyOrEnemey}>`
     justify-cotent:space-between;
 
     @media(max-width:768px) {
-        margin:6px;
+        margin:0 6px;
         width: calc(50% - 12px);
     }
 `
